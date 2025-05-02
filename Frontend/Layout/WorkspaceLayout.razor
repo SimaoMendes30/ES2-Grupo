@@ -1,0 +1,134 @@
+﻿@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@using Blazored.LocalStorage
+@using Frontend.Services
+@using Microsoft.Extensions.Logging
+@using static Themes.SGSCThemes
+@using Frontend.Components
+@inherits LayoutComponentBase
+
+@inject ILocalStorageService LocalStorage
+@inject UtilizadorService UserService
+@inject NavigationManager NavigationManager
+@inject AuthService AuthService
+
+<div class="page-container">
+    <MudLayout>
+        <MudDrawer @bind-Open="_drawerOpen"
+                   ClipMode="DrawerClipMode.Never"
+                   Variant="DrawerVariant.Temporary">
+            <!-- navegação lateral -->
+        </MudDrawer>
+
+        <MudMainContent>
+            <MudAppBar Color="Color.Default" Elevation="3">
+                <div style="width: 150px;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                               Color="Color.Dark"
+                               Edge="Edge.Start"
+                               Size="Size.Medium"
+                               OnClick="@ToggleDrawer"/>
+
+                <MudLink Href="/dashboard" Underline="Underline.None" Class="ml-2">
+                    <MudImage Src="images/helpmate-logo2.png"
+                              Width="200" Height="60"
+                              Alt="Logótipo da aplicação Help Mate"
+                              Class="rounded-lg"/>
+                </MudLink>
+
+                <div style="flex-grow: 1;"></div>
+
+                @if (!string.IsNullOrWhiteSpace(_userName))
+                {
+                    <MudMenu OffsetY="true">
+                        <ActivatorContent>
+                            <div style="
+                                padding: 8px 12px;
+                                display: flex;
+                                align-items: center;
+                                border-radius: 6px;
+                                cursor: pointer;">
+                                <MudAvatar Size="Size.Medium"
+                                           Color="Color.Info"
+                                           Variant="Variant.Outlined"
+                                           Class="mr-2">
+                                    @_userLetter
+                                </MudAvatar>
+                                <div style="width: 12px;"></div>
+                                <div>
+                                    <MudText Typo="Typo.caption" Class="m-0" Style="color: black;">Olá!</MudText>
+                                    <MudText Typo="Typo.subtitle2" Class="m-0" Style="font-weight: bold; color: black;">
+                                        @_userName
+                                    </MudText>
+                                </div>
+                            </div>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem OnClick="@GoToProfile">
+                                <MudIcon Icon="@Icons.Material.Filled.AccountCircle"/> Perfil
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@Logout">
+                                <MudIcon Icon="@Icons.Material.Filled.ExitToApp"/> Sair
+                            </MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
+                }
+                <div style="width: 150px;"></div>
+            </MudAppBar>
+
+            <div style="display: flex; justify-content: center; width: 100%; min-height: 100vh;">
+                <div class="glass-side"></div>
+
+                <div style="flex: 2; padding: 2rem;">
+                    @Body
+                </div>
+
+                <div class="glass-side"></div>
+            </div>
+
+        </MudMainContent>
+    </MudLayout>
+</div>
+
+@code {
+    private bool _drawerOpen;
+    private string _userName;
+    private string _userLetter;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var token = await LocalStorage.GetItemAsync<string>("auth_token");
+            if (string.IsNullOrEmpty(token))
+                return;
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var idClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
+
+            if (idClaim != null && int.TryParse(idClaim.Value, out var userId))
+            {
+                var user = await UserService.GetAsync(userId);
+                if (user != null && !string.IsNullOrWhiteSpace(user.Nome))
+                {
+                    _userName = user.Nome;
+                    _userLetter = user.Nome[0].ToString().ToUpper();
+                }
+            }
+        }
+        catch
+        {
+            // silencioso — sem logs ou mensagem
+        }
+    }
+
+    void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    void GoToProfile() => NavigationManager.NavigateTo("/profile");
+
+    async Task Logout()
+    {
+        await AuthService.LogoutAsync();
+        NavigationManager.NavigateTo("/login");
+    }
+}

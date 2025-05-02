@@ -1,0 +1,24 @@
+.page-container[b-zq8z4w347q] {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url("images/Background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.main-content[b-zq8z4w347q] {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-divider[b-zq8z4w347q] {
+    background-color: rgba(128, 128, 128, 1);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}

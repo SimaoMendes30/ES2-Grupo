@@ -1,0 +1,55 @@
+﻿@inherits LayoutComponentBase
+@using static Themes.SGSCThemes
+
+<!-- Main Page -->
+<div class="page-container">
+    <!-- Header -->
+    <MudAppBar Color="Color.Default" Elevation="3">
+        <div style="width: 150px;"></div>
+        <MudLink Href="/" Underline="Underline.None">
+            <MudImage Src="images/helpmate-logo2.png" Width="200" Height="60" Alt="Logótipo da aplicação Help Mate" Class="rounded-lg"/>
+        </MudLink>
+        <MudSpacer/>
+        <div class="d-flex align-items-center" style="gap: 8px;">
+            <NavLink href="/login" Match="NavLinkMatch.All" class="text-decoration-none">
+                <MudButton Class="p-1" Style="width: 150px;" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Medium">
+                    Iniciar Sessão
+                </MudButton>
+            </NavLink>
+
+            <NavLink href="/create-account" Match="NavLinkMatch.All" class="text-decoration-none">
+                <MudButton Class="p-1" Style="width: 150px;" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium">
+                    Criar Conta
+                </MudButton>
+            </NavLink>
+        </div>
+        <div style="width: 150px;"></div>
+    </MudAppBar>
+
+    <!-- Main Content -->
+    <main class="main-content">
+            @Body
+    </main>
+
+    <!-- Footer -->
+    <MudPaper Elevation="0" Class="pa-4 mx-auto" Style="width: 95%;">
+        <MudGrid Style="width: 100%;" Class="mb-4">
+            <MudItem xs="6" Class="d-flex flex-column align-start">
+                <MudText Typo="Typo.h6" Class="mb-1" Color="Color.Primary">Help Mate</MudText>
+                <MudText Typo="Typo.body2">Sistema de Gestão de Serviços a Clientes</MudText>
+            </MudItem>
+            <MudItem xs="6" Class="d-flex flex-column align-end">
+                <MudText Typo="Typo.caption" Class="mb-1">IPVC ESTG</MudText>
+                <MudText Typo="Typo.caption">Grupo A1 2024/2025</MudText>
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider Class="custom-divider" />
+
+        <MudItem xs="12" Class="d-flex align-start pt-2">
+            <MudText Typo="Typo.caption">© 2024 Help Mate - Todos os direitos reservados.</MudText>
+        </MudItem>
+    </MudPaper>
+</div>
+
+

@@ -1,0 +1,17 @@
+﻿@layout HomeLayout
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<PageTitle>Página não encontrada</PageTitle>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;" class="d-flex flex-column">
+    <MudPaper Style="width: auto; max-width: 80%; background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px)" Class="mx-auto p-4">
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <MudText Typo="Typo.h3" Class="display-4 mb-4 text-center" Color="Color.Primary">Oops! Página não encontrada.</MudText>
+        </div>
+    </MudPaper>
+    <MudPaper Style="width: auto; max-width: 80%; background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px)" Class="mx-auto p-4 mt-4">
+        <MudText Typo="Typo.body1" Class="lead mt-4 text-start">A página que está a tentar acessar não existe ou foi removida.</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/"))" Class="mt-3">Voltar à página inicial</MudButton>
+    </MudPaper>
+</div>

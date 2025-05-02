@@ -1,0 +1,61 @@
+﻿@using Frontend.DTOs.Tarefas
+@using MudBlazor
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+<MudDialog>
+    <DialogContent>
+        <EditForm EditContext="@editContext">
+            <DataAnnotationsValidator />
+
+            <MudStack Spacing="2">
+                
+                <!-- Descrição -->
+                <MudTextField T="string"
+                              Label="Descrição"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Tarefa.Descricao"
+                              Required="true"
+                              FullWidth="true"/>
+
+                <!-- Preço por hora -->
+                <MudNumericField T="decimal?"
+                                 Label="Preço/Hora (€)"
+                                 Variant="Variant.Outlined"
+                                 @bind-Value="Tarefa.PrecoHora"
+                                 Min="0"
+                                 DecimalPlaces="2"
+                                 FullWidth="true"/>
+            </MudStack>
+
+            <ValidationSummary />
+        </EditForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="@Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit">Guardar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private TarefaCreateDto Tarefa { get; set; } = new();
+    private EditContext editContext = default!;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(Tarefa);
+    }
+
+    private void Submit()
+    {
+        if (editContext.Validate())
+        {
+            MudDialog.Close(DialogResult.Ok(Tarefa));
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

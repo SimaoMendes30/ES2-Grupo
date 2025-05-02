@@ -1,0 +1,35 @@
+﻿@using Frontend.Services
+@inject TarefaService TarefaService
+
+<MudDialog FullWidth MaxWidth="MaxWidth.Small" @bind-IsVisible="_open">
+    <DialogContent>
+        <MudTextField Label="ID do novo projeto" @bind-Value="NovoProjetoId" FullWidth />
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Mover">Mover</MudButton>
+        <MudButton OnClick="Fechar">Cancelar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public EventCallback OnMoved { get; set; }
+
+    private int NovoProjetoId;
+    private int _tarefaId;
+    private bool _open;
+
+    public void Open(int tarefaId)
+    {
+        _tarefaId = tarefaId;
+        _open = true;
+    }
+
+    private void Fechar() => _open = false;
+
+    private async Task Mover()
+    {
+        await TarefaService.MoveAsync(_tarefaId, NovoProjetoId);
+        await OnMoved.InvokeAsync();
+        Fechar();
+    }
+}

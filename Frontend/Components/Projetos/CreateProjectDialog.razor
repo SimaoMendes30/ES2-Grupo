@@ -1,0 +1,38 @@
+﻿@using Frontend.DTOs.Projetos
+
+<MudDialog>
+    <MudDialogContent>
+        <EditForm EditContext="editContext">
+            <DataAnnotationsValidator />
+            <MudTextField @bind-Value="Projeto.Nome" Label="Nome" Required="true" />
+            <MudTextField @bind-Value="Projeto.NomeCliente" Label="Nome do Cliente" Required="true" />
+            <MudTextField @bind-Value="Projeto.Descricao" Label="Descrição" TextArea="true" Lines="3" />
+            <MudNumericField T="decimal?" @bind-Value="Projeto.PrecoHora" Label="Preço/Hora (€)" Min="0" DecimalPlaces="2" />
+        </EditForm>
+    </MudDialogContent>
+
+    <MudDialogActions>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Guardar</MudButton>
+    </MudDialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+
+    private ProjetoCreateDto Projeto { get; set; } = new();
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(Projeto);
+    }
+
+    private void Submit()
+    {
+        if (editContext.Validate())
+            MudDialog.Close(DialogResult.Ok(Projeto));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

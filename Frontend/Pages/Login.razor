@@ -1,0 +1,147 @@
+﻿@page "/login"
+@layout SubMainLayout
+
+@using Frontend.DTOs.Utilizadores
+@using Frontend.Services
+@inject AuthService       AuthSvc
+@inject NavigationManager Navigation
+
+<PageTitle>Iniciar Sessão</PageTitle>
+
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;">
+    <MudPaper Elevation="10" Class="pa-8" Style="flex-grow:1;min-width:800px;max-width:90%;background-color:rgba(255,255,255,.8);backdrop-filter:blur(10px);">
+        <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
+
+            <!-- ─────────── ESQUERDA ─────────── -->
+            <MudItem xs="12" md="4">
+                <MudContainer>
+                    <MudLink Href="/" Underline="Underline.None">
+                        <MudImage Src="images/helpmate-logo2.png" Width="200" Height="60"
+                                  Alt="Logótipo Help Mate" Class="rounded-lg mb-4"/>
+                    </MudLink>
+
+                    <MudText Typo="Typo.h5" Class="mb-2 fw-bold" Color="Color.Primary">
+                        Iniciar Sessão
+                    </MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Dark">
+                        Continuar para a sua conta Help Mate
+                    </MudText>
+                </MudContainer>
+            </MudItem>
+
+            <MudItem xs="12" md="1" class="d-flex justify-center">
+                <MudDivider Vertical="true" />
+            </MudItem>
+
+            <!-- ─────────── FORM ─────────── -->
+            <MudItem xs="12" md="7">
+                <MudContainer>
+                    <EditForm Model="_loginDto" OnValidSubmit="HandleLogin">
+                        <DataAnnotationsValidator />
+
+                        <MudTextField @bind-Value="_loginDto.Username"
+                                      Label="Username"
+                                      Variant="Variant.Outlined"
+                                      FullWidth="true"
+                                      Required="true"
+                                      AdornmentIcon="@Icons.Material.Filled.Person"
+                                      Class="mb-4"
+                                      Error="@HasError" ErrorText="@_errorMessage" />
+
+                        <MudTextField @bind-Value="_loginDto.Password"
+                                      Label="Password"
+                                      Variant="Variant.Outlined"
+                                      FullWidth="true"
+                                      Required="true"
+                                      InputType="InputType.Password"
+                                      AdornmentIcon="@Icons.Material.Filled.Lock"
+                                      Class="mb-4"
+                                      Error="@HasError" ErrorText="@_errorMessage" />
+
+                        <div class="d-flex justify-end mb-4">
+                            <MudLink Href="/forgot-password" Underline="Underline.Hover" Typo="Typo.body2">
+                                Esqueceu a password?
+                            </MudLink>
+                        </div>
+
+                        <MudButton Disabled="_isProcessing"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   FullWidth="true"
+                                   Size="Size.Large"
+                                   ButtonType="ButtonType.Submit"
+                                   Class="mb-4 mud-button-hover-scale"
+                                   EndIcon="@(!_isProcessing ? Icons.Material.Filled.ArrowForward : null)">
+                            @if (_isProcessing)
+                            {
+                                <MudProgressCircular Size="Size.Small" Class="mr-2" />
+                                <span>A processar…</span>
+                            }
+                            else
+                            {
+                                <span>Iniciar Sessão</span>
+                            }
+                        </MudButton>
+
+                        @if (HasError)
+                        {
+                            <MudAlert Severity="Severity.Error" Class="mb-4">@_errorMessage</MudAlert>
+                        }
+                    </EditForm>
+
+                    <MudDivider Class="my-4" />
+
+                    <div class="text-center">
+                        <MudText Typo="Typo.body2" Class="mr-2">Não tem conta?</MudText>
+                        <NavLink href="/create-account" class="text-decoration-none">
+                            <MudButton Variant="Variant.Text" Color="Color.Primary"
+                                       EndIcon="@Icons.Material.Filled.PersonAdd">
+                                Criar Conta
+                            </MudButton>
+                        </NavLink>
+                    </div>
+                </MudContainer>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</div>
+
+<style>
+    .mud-button-hover-scale { transition: transform .2s ease-in-out; }
+    .mud-button-hover-scale:hover { transform: scale(1.02); }
+</style>
+
+@code {
+    private readonly LoginDto _loginDto = new();
+    private string _errorMessage = string.Empty;
+    private bool   _isProcessing;
+
+    private bool HasError => !string.IsNullOrEmpty(_errorMessage);
+
+    private async Task HandleLogin()
+    {
+        if (_isProcessing) return;
+        _isProcessing  = true;
+        _errorMessage  = string.Empty;
+
+        try
+        {
+            var ok = await AuthSvc.LoginAsync(_loginDto);  
+            if (ok)
+            {
+                Navigation.NavigateTo("/dashboard", forceLoad: true);
+                return;
+            }
+
+            _errorMessage = "Credenciais inválidas.";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Erro ao fazer login: {ex.Message}";
+        }
+        finally
+        {
+            _isProcessing = false;
+        }
+    }
+}
