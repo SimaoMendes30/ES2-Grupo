@@ -2,19 +2,23 @@
 
 namespace Frontend.DTOs.Projetos;
 
-
 public class ProjetoCreateDto
 {
     [Required(ErrorMessage = "O nome é obrigatório.")]
-    public string Nome { get; set; }
+    [MaxLength(250, ErrorMessage = "O nome deve ter no máximo 250 caracteres.")]
+    public string Nome { get; set; } = null!;
 
     [Required(ErrorMessage = "O nome do cliente é obrigatório.")]
-    public string NomeCliente { get; set; }
+    [MaxLength(250, ErrorMessage = "O nome do cliente deve ter no máximo 250 caracteres.")]
+    public string NomeCliente { get; set; } = null!;
 
-    public string Descricao { get; set; }
+    public string? Descricao { get; set; }
 
-    [Range(0, 9999, ErrorMessage = "O valor deve ser maior que zero.")]
+    [Range(0, 999999.99, ErrorMessage = "O valor por hora deve ser positivo.")]
     public decimal? PrecoHora { get; set; }
 
-    public int IdUtilizador { get; set; }
+    [Required(ErrorMessage = "O responsável é obrigatório.")]
+    public int Responsavel { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
 }

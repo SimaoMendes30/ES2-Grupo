@@ -1,37 +1,79 @@
 ﻿@using Frontend.DTOs.Projetos
+@using MudBlazor
+@using System.ComponentModel.DataAnnotations
+@using System.Net
+@using Frontend.Services
+@using Microsoft.AspNetCore.Components.Forms
 
 <MudDialog>
-    <MudDialogContent>
-        <EditForm EditContext="editContext">
+    <DialogContent>
+        <EditForm EditContext="@editContext">
             <DataAnnotationsValidator />
-            <MudTextField @bind-Value="Projeto.Nome" Label="Nome" Required="true" />
-            <MudTextField @bind-Value="Projeto.NomeCliente" Label="Nome do Cliente" Required="true" />
-            <MudTextField @bind-Value="Projeto.Descricao" Label="Descrição" TextArea="true" Lines="3" />
-            <MudNumericField T="decimal?" @bind-Value="Projeto.PrecoHora" Label="Preço/Hora (€)" Min="0" DecimalPlaces="2" />
-        </EditForm>
-    </MudDialogContent>
 
-    <MudDialogActions>
-        <MudButton OnClick="Cancel">Cancelar</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Guardar</MudButton>
-    </MudDialogActions>
+            <MudStack Spacing="2">
+                <MudTextField T="string"
+                              Label="Nome"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Projeto.Nome"
+                              Required="true"
+                              FullWidth="true"/>
+
+                <MudTextField T="string"
+                              Label="Nome do Cliente"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Projeto.NomeCliente"
+                              Required="true"
+                              FullWidth="true"/>
+
+                <MudTextField T="string"
+                              Label="Descrição"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Projeto.Descricao"
+                              TextArea="true"
+                              Lines="3"
+                              FullWidth="true"/>
+
+                <MudNumericField T="decimal?"
+                                 Label="Preço/Hora (€)"
+                                 Variant="Variant.Outlined"
+                                 @bind-Value="Projeto.PrecoHora"
+                                 Min="0"
+                                 DecimalPlaces="2"
+                                 FullWidth="true"/>
+            </MudStack>
+
+            <ValidationSummary />
+        </EditForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="@Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit">Criar</MudButton>
+    </DialogActions>
 </MudDialog>
 
 @code {
-    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Inject] private ProjetoService ProjetoService { get; set; } = default!;
 
     private ProjetoCreateDto Projeto { get; set; } = new();
-    private EditContext editContext;
+    private EditContext editContext = default!;
 
     protected override void OnInitialized()
     {
         editContext = new EditContext(Projeto);
     }
 
-    private void Submit()
+    private async Task Submit()
     {
         if (editContext.Validate())
-            MudDialog.Close(DialogResult.Ok(Projeto));
+        {
+            var success = await ProjetoService.CreateAsync(Projeto);
+            if (success)
+                MudDialog.Close(DialogResult.Ok(Projeto));
+            else
+                MudDialog.Close(DialogResult.Cancel()); // ou notificar erro
+        }
     }
 
     private void Cancel() => MudDialog.Cancel();

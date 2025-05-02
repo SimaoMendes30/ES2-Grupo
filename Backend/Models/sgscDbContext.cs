@@ -23,8 +23,7 @@ public partial class sgscDbContext : DbContext
 
     public virtual DbSet<Utilizador> Utilizadors { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Name=DefaultConnection");
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,8 +40,11 @@ public partial class sgscDbContext : DbContext
             entity.Property(e => e.IdMembro).HasColumnName("id_membro");
             entity.Property(e => e.DataConvite)
                 .HasDefaultValueSql("CURRENT_DATE")
+                .HasColumnType("timestamp without time zone")
                 .HasColumnName("data_convite");
-            entity.Property(e => e.DataEstado).HasColumnName("data_estado");
+            entity.Property(e => e.DataEstado)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("data_estado");
             entity.Property(e => e.EstadoAtividade)
                 .HasMaxLength(250)
                 .HasColumnName("estado_atividade");
@@ -69,49 +71,68 @@ public partial class sgscDbContext : DbContext
 
             entity.ToTable("Projeto");
 
-            entity.HasIndex(e => e.IdUtilizador, "idx_projeto_utilizador");
+            entity.HasIndex(e => e.Responsavel, "idx_projeto_utilizador");
 
             entity.Property(e => e.IdProjeto).HasColumnName("id_projeto");
             entity.Property(e => e.DataCriacao)
                 .HasDefaultValueSql("CURRENT_DATE")
                 .HasColumnName("data_criacao");
             entity.Property(e => e.Descricao).HasColumnName("descricao");
-            entity.Property(e => e.IdUtilizador).HasColumnName("id_utilizador");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.Nome)
                 .HasMaxLength(250)
                 .HasColumnName("nome");
             entity.Property(e => e.NomeCliente)
                 .HasMaxLength(250)
                 .HasColumnName("nome_cliente");
-            entity.Property(e => e.PrecoHora).HasColumnName("preco_hora");
+            entity.Property(e => e.PrecoHora)
+                .HasPrecision(10, 2)
+                .HasColumnName("preco_hora");
+            entity.Property(e => e.Responsavel).HasColumnName("responsavel");
 
-            entity.HasOne(d => d.IdUtilizadorNavigation).WithMany(p => p.Projetos)
-                .HasForeignKey(d => d.IdUtilizador)
+            entity.HasOne(d => d.ResponsavelNavigation).WithMany(p => p.Projetos)
+                .HasForeignKey(d => d.Responsavel)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Projeto_id_utilizador_fkey");
         });
 
         modelBuilder.Entity<Tarefa>(entity =>
         {
-            entity.HasKey(e => e.IdTarefa).HasName("Tarefa_pkey");
+            entity.HasKey(e => e.IdTarefa).HasName("tarefa_pkey");
 
             entity.ToTable("Tarefa");
 
-            entity.Property(e => e.IdTarefa).HasColumnName("id_tarefa");
-            entity.Property(e => e.DataFim).HasColumnName("data_fim");
-            entity.Property(e => e.DataHoraInicio)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            entity.Property(e => e.IdTarefa)
+                .HasDefaultValueSql("nextval('tarefa_id_tarefa_seq'::regclass)")
+                .HasColumnName("id_tarefa");
+            entity.Property(e => e.DataFim)
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("data_hora_inicio");
+                .HasColumnName("data_fim");
             entity.Property(e => e.DataInicio)
                 .HasDefaultValueSql("CURRENT_DATE")
+                .HasColumnType("timestamp without time zone")
                 .HasColumnName("data_inicio");
             entity.Property(e => e.Descricao).HasColumnName("descricao");
             entity.Property(e => e.Estado)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("estado");
-            entity.Property(e => e.PrecoHora).HasColumnName("preco_hora");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.PrecoHora)
+                .HasPrecision(10, 2)
+                .HasColumnName("preco_hora");
             entity.Property(e => e.Responsavel).HasColumnName("responsavel");
+            entity.Property(e => e.Titulo)
+                .HasMaxLength(256)
+                .HasColumnName("titulo");
+
+            entity.HasOne(d => d.ResponsavelNavigation).WithMany(p => p.Tarefas)
+                .HasForeignKey(d => d.Responsavel)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("tarefa_responsavel_fkey");
 
             entity.HasMany(d => d.IdProjetos).WithMany(p => p.IdTarefas)
                 .UsingEntity<Dictionary<string, object>>(
@@ -142,6 +163,8 @@ public partial class sgscDbContext : DbContext
             entity.ToTable("Utilizador");
 
             entity.HasIndex(e => e.Username, "Utilizador_username_key").IsUnique();
+
+            entity.HasIndex(e => e.Username, "idx_utilizador_username");
 
             entity.Property(e => e.IdUtilizador).HasColumnName("id_utilizador");
             entity.Property(e => e.Admin)

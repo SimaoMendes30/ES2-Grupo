@@ -9,7 +9,12 @@
             <DataAnnotationsValidator />
 
             <MudStack Spacing="2">
-                
+                <MudTextField T="string"
+                              Label="Título"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Tarefa.Titulo"
+                              Required="true"
+                              FullWidth="true"/>
                 <!-- Descrição -->
                 <MudTextField T="string"
                               Label="Descrição"
@@ -34,7 +39,7 @@
 
     <DialogActions>
         <MudButton OnClick="@Cancel">Cancelar</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@Submit">Guardar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit">Criar</MudButton>
     </DialogActions>
 </MudDialog>
 

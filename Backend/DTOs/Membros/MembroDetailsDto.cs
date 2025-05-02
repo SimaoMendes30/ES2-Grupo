@@ -1,5 +1,5 @@
 ﻿namespace Backend.DTOs.Membros;
-using Backend.DTOs.Projeto;
+using Backend.DTOs.Projetos;
 using Backend.DTOs.Utilizadores;
 public class MembroDetailsDto
 {

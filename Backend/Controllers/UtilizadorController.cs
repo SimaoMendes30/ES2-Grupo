@@ -60,7 +60,7 @@ public sealed class UtilizadorController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:int}/password")]
+    [HttpPut("{id:int}/password")]
     public async Task<IActionResult> UpdatePassword(int id, [FromBody] UtilizadorUpdatePasswordDto dto)
     {
         await _svc.UpdatePasswordAsync(id, dto);

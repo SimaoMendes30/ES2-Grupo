@@ -199,19 +199,23 @@
 
     private void AplicarFiltros()
     {
-        _tarefasFiltradas = _tarefas
-            .Where(t =>
-                (string.IsNullOrEmpty(_filtroDescricao) || t.Descricao.Contains(_filtroDescricao, StringComparison.OrdinalIgnoreCase)) &&
-                (string.IsNullOrEmpty(_filtroEstado) || t.Estado == _filtroEstado) &&
-                (!_filtroDataInicio.HasValue || t.DataInicio.ToDateTime(TimeOnly.MinValue) >= _filtroDataInicio.Value) &&
-                (!_filtroDataFim.HasValue || t.DataInicio.ToDateTime(TimeOnly.MinValue) <= _filtroDataFim.Value)
-            )
-            .ToList();
+        _tarefasFiltradas = _tarefas.Where(t =>
+            (string.IsNullOrWhiteSpace(_filtroDescricao) ||
+             t.Descricao.Contains(_filtroDescricao, StringComparison.OrdinalIgnoreCase)) &&
+
+            (string.IsNullOrWhiteSpace(_filtroEstado) || t.Estado == _filtroEstado) &&
+
+            (!_filtroDataInicio.HasValue ||
+             t.DataInicio.Date >= _filtroDataInicio.Value.Date) &&
+
+            (!_filtroDataFim.HasValue ||
+             t.DataInicio.Date <= _filtroDataFim.Value.Date)
+        ).ToList();
 
         OrdenarPor(_ordenacaoAtual);
         mostrarFiltros = false;
     }
-
+    
     private void LimparFiltros()
     {
         _filtroDescricao = string.Empty;

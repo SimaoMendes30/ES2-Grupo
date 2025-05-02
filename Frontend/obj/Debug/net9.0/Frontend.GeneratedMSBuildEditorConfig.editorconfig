@@ -35,18 +35,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZXRvc1xDcmVhdGVQcm9qZWN0RGlhbG9nLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Projetos/EditProjetoInline.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZXRvc1xFZGl0UHJvamV0b0lubGluZS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Projetos/MoverTarefaInline.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZXRvc1xNb3ZlclRhcmVmYUlubGluZS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Projetos/NovaTarefaInline.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZXRvc1xOb3ZhVGFyZWZhSW5saW5lLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Tarefa/CreateTaskDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYXJlZmFcQ3JlYXRlVGFza0RpYWxvZy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -85,6 +73,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Pages/Tasks.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFza3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Pages/UpdateProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/diogo/Desktop/ESII_SGSC/Frontend/_Imports.razor]

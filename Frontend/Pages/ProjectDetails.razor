@@ -2,12 +2,11 @@
 @using Frontend.DTOs.Projetos
 @using Frontend.DTOs.Tarefas
 @using Frontend.Services
-@using Frontend.Components.Projetos
-@inject ProjetoService ProjetoService
-@inject TarefaService TarefaService
+@inject ProjetoService   ProjetoService
+@inject TarefaService    TarefaService
 @inject NavigationManager NavigationManager
-@inject ISnackbar Snackbar
-@inject IDialogService DialogService
+@inject ISnackbar        Snackbar
+@inject IDialogService   DialogService
 @layout WorkspaceLayout
 
 <PageTitle>Detalhes do Projeto</PageTitle>
@@ -15,79 +14,92 @@
 <div class="page-container">
     <div class="glass-side"></div>
 
-    <div style="flex: 2; padding: 2rem;">
+    <div style="flex:2;padding:2rem">
         @if (_projeto is null)
         {
-            <MudText>Carregando projeto...</MudText>
+            <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
         }
         else
         {
-            <MudPaper Class="pa-4 mb-6" Elevation="4" Style="background-color: rgba(255,255,255,0.85); border-radius: 12px; backdrop-filter: blur(8px);">
-                <MudText Typo="Typo.h5" Color="Color.Primary">@_projeto.Nome</MudText>
-                <MudText Typo="Typo.subtitle2">@_projeto.NomeCliente</MudText>
-                <MudDivider Class="my-2" />
-                <MudText Typo="Typo.body1">@_projeto.Descricao</MudText>
-                <MudText Typo="Typo.caption" Class="mt-2"><b>Preço/h:</b> @_projeto.PrecoHora?.ToString("C") ?? "N/D"</MudText>
-                <MudText Typo="Typo.caption"><b>Criado em:</b> @_projeto.DataCriacao?.ToShortDateString() ?? "N/D"</MudText>
+            <!-- ---------- Dados do projeto ---------- -->
+            <MudPaper Elevation="4" Class="pa-6 mb-6"
+                      Style="background:rgba(255,255,255,.9);border-radius:16px;backdrop-filter:blur(8px)">
+                <MudStack Spacing="1">
+                    <MudText Typo="Typo.h4" Color="Color.Primary">@_projeto.Nome</MudText>
+                    <MudText Typo="Typo.subtitle2">@_projeto.NomeCliente</MudText>
 
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="() => EditDialog?.Open()">Editar</MudButton>
-                <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="DeleteProjeto">Eliminar</MudButton>
+                    <MudDivider Class="my-2"/>
+
+                    <MudText Typo="Typo.body1">@_projeto.Descricao</MudText>
+
+                    <MudStack Row Spacing="4" Class="mt-2">
+                        <MudText Typo="Typo.caption"><b>Preço/h:</b> @_projeto.PrecoHora?.ToString("C") ?? "N/D"</MudText>
+                        <MudText Typo="Typo.caption"><b>Criado em:</b> @_projeto.DataCriacao?.ToShortDateString() ?? "N/D"</MudText>
+                    </MudStack>
+
+                    <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-3">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteProjeto">
+                            Eliminar
+                        </MudButton>
+                    </MudStack>
+                </MudStack>
             </MudPaper>
 
-            <EditProjetoInline @ref="EditDialog" Projeto="@_projeto" OnSaved="OnProjetoEditado" />
+            <!-- ---------- Tarefas ---------- -->
+            <MudPaper Elevation="3" Class="pa-6"
+                      Style="background:rgba(255,255,255,.95);border-radius:16px">
+                <MudStack Spacing="2">
+                    <MudText Typo="Typo.h6" Color="Color.Primary">Tarefas Associadas</MudText>
 
-            <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-3">Tarefas Associadas</MudText>
-            <MudButton Color="Color.Secondary" OnClick="() => NovaTarefaDialog?.Open()">Nova Tarefa</MudButton>
-
-            <NovaTarefaInline @ref="NovaTarefaDialog" ProjetoId="@ProjetoId" PrecoProjeto="@_projeto?.PrecoHora" OnCreated="RecarregarTarefas" />
-
-            <MudGrid GutterSize="2" RowSpacing="3">
-                @if (_tarefas is null)
-                {
-                    <MudText>Carregando tarefas...</MudText>
-                }
-                else if (!_tarefas.Any())
-                {
-                    <MudText>Não existem tarefas associadas.</MudText>
-                }
-                else
-                {
-                    @foreach (var tarefa in _tarefas)
+                    @if (_tarefas is null)
                     {
-                        <MudItem xs="12" sm="6" md="4">
-                            <MudPaper Class="pa-3" Elevation="2" Style="background-color: rgba(255,255,255,0.9); border-radius: 10px;">
-                                <MudText Typo="Typo.subtitle1" Color="Color.Primary">@tarefa.Descricao</MudText>
-                                <MudText Typo="Typo.caption"><b>Estado:</b> @tarefa.Estado</MudText>
-                                <MudText Typo="Typo.caption"><b>Início:</b> @tarefa.DataInicio.ToShortDateString()</MudText>
-                                <MudText Typo="Typo.caption"><b>Fim:</b> @(tarefa.DataFim?.ToShortDateString() ?? "Em curso")</MudText>
-
-                                <MudMenu>
-                                    <MudMenuItem OnClick="() => TerminarTarefa(tarefa.IdTarefa)">Terminar</MudMenuItem>
-                                    <MudMenuItem OnClick="() => RemoverTarefa(tarefa.IdTarefa)">Remover</MudMenuItem>
-                                    <MudMenuItem OnClick="() => MoverTarefaDialog?.Open(tarefa.IdTarefa)">Mover</MudMenuItem>
-                                </MudMenu>
-                            </MudPaper>
-                        </MudItem>
+                        <MudProgressCircular Color="Color.Primary" Indeterminate/>
                     }
-                }
-            </MudGrid>
+                    else if (!_tarefas.Any())
+                    {
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled">
+                            Não existem tarefas associadas.
+                        </MudAlert>
+                    }
+                    else
+                    {
+                        <MudGrid GutterSize="2" RowSpacing="3">
+                            @foreach (var t in _tarefas)
+                            {
+                                <MudItem xs="12" sm="6" md="4">
+                                    <MudPaper Class="pa-4" Elevation="2"
+                                              Style="background:rgba(255,255,255,.9);border-radius:12px">
+                                        <MudStack Spacing="1">
+                                            <MudText Typo="Typo.subtitle1" Color="Color.Primary">@t.Descricao</MudText>
+                                            <MudText Typo="Typo.caption"><b>Estado:</b> @t.Estado</MudText>
+                                            <MudText Typo="Typo.caption"><b>Início:</b> @t.DataInicio.ToShortDateString()</MudText>
+                                            <MudText Typo="Typo.caption"><b>Fim:</b> @(t.DataFim?.ToShortDateString() ?? "Em curso")</MudText>
+
+                                            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                                                <MudMenuItem OnClick="() => TerminarTarefa(t.IdTarefa)">Terminar</MudMenuItem>
+                                                <MudMenuItem OnClick="() => RemoverTarefa(t.IdTarefa)">Remover</MudMenuItem>
+                                            </MudMenu>
+                                        </MudStack>
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    }
+                </MudStack>
+            </MudPaper>
         }
     </div>
 
     <div class="glass-side"></div>
 </div>
 
-<MoverTarefaInline @ref="MoverTarefaDialog" OnMoved="RecarregarTarefas" />
-
 @code {
     [Parameter] public int ProjetoId { get; set; }
-    private ProjetoDto? _projeto;
-    private IEnumerable<TarefaDto>? _tarefas;
 
-    private EditProjetoInline? EditDialog;
-    private NovaTarefaInline? NovaTarefaDialog;
-    private MoverTarefaInline? MoverTarefaDialog;
+    private ProjetoDto?              _projeto;
+    private IEnumerable<TarefaDto>?  _tarefas;
 
+    /* ---------- ciclo de vida ---------- */
     protected override async Task OnInitializedAsync()
     {
         _projeto = await ProjetoService.GetAsync(ProjetoId);
@@ -100,50 +112,39 @@
         StateHasChanged();
     }
 
-    private async Task OnProjetoEditado()
-    {
-        _projeto = await ProjetoService.GetAsync(ProjetoId);
-        Snackbar.Add("Projeto atualizado com sucesso.", Severity.Success);
-        StateHasChanged();
-    }
-
+    /* ---------- ações ---------- */
     private async Task DeleteProjeto()
     {
-        var confirmed = await DialogService.ShowMessageBox("Eliminar", "Tem a certeza que deseja eliminar este projeto?", "Sim", "Cancelar");
+        var confirm = await DialogService.ShowMessageBox(
+            "Eliminar",
+            "Tem a certeza que deseja eliminar este projeto?",
+            "Sim", "Cancelar");
 
-        if (confirmed == true && _projeto is not null)
+        if (confirm == true && _projeto is not null)
         {
-            var success = await ProjetoService.DeleteAsync(_projeto.IdProjeto);
-            if (success)
+            if (await ProjetoService.DeleteAsync(_projeto.IdProjeto))
             {
                 Snackbar.Add("Projeto eliminado com sucesso.", Severity.Success);
                 NavigationManager.NavigateTo("/projetos");
             }
-            else
-            {
-                Snackbar.Add("Erro ao eliminar o projeto.", Severity.Error);
-            }
+            else Snackbar.Add("Erro ao eliminar o projeto.", Severity.Error);
         }
     }
 
-    private async Task TerminarTarefa(int tarefaId)
+    private async Task TerminarTarefa(int id)
     {
-        await TarefaService.EndAsync(tarefaId, new EndTarefaDto(null));
+        await TarefaService.EndAsync(id, new EndTarefaDto(null));
         Snackbar.Add("Tarefa marcada como concluída.", Severity.Success);
         await RecarregarTarefas();
     }
 
-    private async Task RemoverTarefa(int tarefaId)
+    private async Task RemoverTarefa(int id)
     {
-        var success = await TarefaService.DeleteAsync(tarefaId);
-        if (success)
+        if (await TarefaService.DeleteAsync(id))
         {
             Snackbar.Add("Tarefa removida com sucesso.", Severity.Info);
             await RecarregarTarefas();
         }
-        else
-        {
-            Snackbar.Add("Erro ao remover tarefa.", Severity.Error);
-        }
+        else Snackbar.Add("Erro ao remover tarefa.", Severity.Error);
     }
 }

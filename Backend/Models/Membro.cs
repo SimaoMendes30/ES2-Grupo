@@ -11,9 +11,9 @@ public partial class Membro
 
     public int IdProjeto { get; set; }
 
-    public DateOnly? DataConvite { get; set; }
+    public DateTime DataConvite { get; set; }
 
-    public DateOnly? DataEstado { get; set; }
+    public DateTime? DataEstado { get; set; }
 
     public string EstadoConvite { get; set; } = null!;
 

@@ -1,8 +1,8 @@
-﻿namespace Backend.Repositories;
-
-using Repositories.Interfaces;
-using Models;
+﻿using Backend.Models;
+using Backend.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
+namespace Backend.Repositories;
 
 public sealed class ProjetoRepository : IProjetoRepository
 {
@@ -12,39 +12,40 @@ public sealed class ProjetoRepository : IProjetoRepository
     public async Task<Projeto> GetByIdAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Projetos.Include(p => p.Membros).ThenInclude(m => m.IdUtilizadorNavigation)
+        return await ctx.Projetos
+            .Include(p => p.Membros).ThenInclude(m => m.IdUtilizadorNavigation)
             .Include(p => p.IdTarefas)
-            .AsNoTracking().FirstAsync(p => p.IdProjeto == id);
+            .FirstAsync(p => p.IdProjeto == id);
     }
-    
-    public async Task<IEnumerable<Projeto>> GetByUtilizadorIdAsync(int utilizadorId)
+
+    public async Task<IEnumerable<Projeto>> GetByUtilizadorIdAsync(int responsavelId)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Projetos.Where(p => p.IdUtilizador == utilizadorId)
+        return await ctx.Projetos.Where(p => p.Responsavel == responsavelId)
             .Include(p => p.Membros)
-            .AsNoTracking().ToListAsync();
+            .ToListAsync();
     }
-    
+
     public async Task AddAsync(Projeto projeto)
     {
         await using var ctx = _factory.CreateDbContext();
         ctx.Projetos.Add(projeto);
         await ctx.SaveChangesAsync();
     }
-    
+
     public async Task UpdateAsync(Projeto projeto)
     {
         await using var ctx = _factory.CreateDbContext();
         ctx.Projetos.Update(projeto);
         await ctx.SaveChangesAsync();
     }
-    
+
     public async Task DeleteAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
         var entity = await ctx.Projetos.FindAsync(id);
         if (entity is null) return;
-        ctx.Projetos.Remove(entity);
+        entity.IsDeleted = true; // soft‑delete
         await ctx.SaveChangesAsync();
     }
 }

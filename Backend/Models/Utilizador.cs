@@ -23,5 +23,7 @@ public partial class Utilizador
 
     public virtual ICollection<Projeto> Projetos { get; set; } = new List<Projeto>();
 
+    public virtual ICollection<Tarefa> Tarefas { get; set; } = new List<Tarefa>();
+
     public virtual ICollection<Tarefa> IdTarefas { get; set; } = new List<Tarefa>();
 }

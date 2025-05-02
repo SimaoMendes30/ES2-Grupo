@@ -1,4 +1,4 @@
-﻿using Backend.DTOs.Projeto;
+﻿using Backend.DTOs.Projetos;
 using Backend.DTOs.Tarefas;
 using Backend.DTOs.Membros;
 using Backend.DTOs.Relatorios;

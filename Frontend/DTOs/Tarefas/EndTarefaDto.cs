@@ -1,3 +1,6 @@
 ﻿namespace Frontend.DTOs.Tarefas;
 
-public record EndTarefaDto(DateTime? DataFim);
+using System.ComponentModel.DataAnnotations;
+
+public sealed record EndTarefaDto(
+    [DataType(DataType.DateTime)] DateTime? DataFim);

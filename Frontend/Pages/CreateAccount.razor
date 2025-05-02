@@ -145,7 +145,7 @@
 
         try
         {
-            var response = await Http.PostAsJsonAsync("api/Utilizador", _utilizadorDto);
+            var response = await Http.PostAsJsonAsync("api/utilizador/criar", _utilizadorDto);
 
             if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {

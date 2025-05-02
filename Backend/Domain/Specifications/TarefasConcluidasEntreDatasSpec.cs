@@ -1,18 +1,15 @@
-﻿namespace Backend.Domain.Specifications;
+﻿using System;
+using System.Linq;
 using Backend.Models;
-using Backend.DTOs.Relatorios;
+
+namespace Backend.Domain.Specifications;
+
 public sealed class TarefasConcluidasEntreDatasSpec : ITarefaSpecification
 {
-    private readonly DateTime _inicio;
+    private readonly DateTime _ini;
     private readonly DateTime _fim;
-    public TarefasConcluidasEntreDatasSpec(DateTime inicio, DateTime fim)
-    {
-        _inicio = inicio;
-        _fim = fim;
-    }
-    public IQueryable<Tarefa> Apply(IQueryable<Tarefa> query) =>
-        query.Where(t => t.DataFim != null &&
-                         t.DataHoraInicio != null &&
-                         t.DataHoraInicio >= _inicio &&
-                         t.DataFim.Value.ToDateTime(TimeOnly.MinValue) <= _fim);
+    public TarefasConcluidasEntreDatasSpec(DateTime ini, DateTime fim) { _ini = ini; _fim = fim; }
+
+    public IQueryable<Tarefa> Apply(IQueryable<Tarefa> q) =>
+        q.Where(t => t.DataFim.HasValue && t.DataFim >= _ini && t.DataFim <= _fim);
 }

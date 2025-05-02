@@ -7,103 +7,90 @@
 @using MudBlazor
 @layout WorkspaceLayout
 
-@inject ProjetoService ProjectService
+@inject ProjetoService      ProjectService
 @inject ILocalStorageService LocalStorage
-@inject IDialogService DialogService
-@inject ISnackbar Snackbar
+@inject IDialogService       DialogService
+@inject ISnackbar            Snackbar
 
 <PageTitle>Projetos</PageTitle>
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding-top: 2rem;">
-    <div style="width: 90%;">
-
-        <!-- CABEÇALHO -->
+<div class="d-flex flex-column align-center justify-center w-100 pt-8">
+    <div style="width:90%">
+        <!-- ---------- CABEÇALHO ---------- -->
         <MudPaper Class="pa-4 mb-6 d-flex align-items-center justify-between"
                   Elevation="1"
-                  Style="background-color: rgba(255,255,255,1); border-radius: 12px; width: 100%; min-height: 120px;">
+                  Style="background:#fff;border-radius:12px;min-height:120px">
+            <MudText Typo="Typo.h4" Class="mb-0" Color="Color.Primary">Projetos</MudText>
+            <MudSpacer/>
 
-            <!-- Título à esquerda -->
-            <MudText Typo="Typo.h4" Class="mb-0 text-start" Color="Color.Primary">
-                Projetos
-            </MudText>
-            
-            <MudSpacer />
-
-            <!-- Ações à direita -->
-            <div style="display: flex; align-items: center; gap: 2rem;">
-        
+            <!-- Filtros / Ordenação -->
+            <div class="d-flex align-center" style="gap:2rem">
                 <!-- Filtros -->
-                <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"
+                <div class="d-flex align-center" style="gap:.5rem;cursor:pointer"
                      @onclick="() => mostrarFiltros = !mostrarFiltros">
-                    <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary" />
+                    <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary"/>
                     <MudText Typo="Typo.subtitle2" Color="Color.Primary">Filtros</MudText>
                 </div>
 
                 <!-- Ordenação -->
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <MudMenu>
-                        <ActivatorContent>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowDropDown">
-                                Ordenar por
-                            </MudButton>
-                        </ActivatorContent>
-
-                        <ChildContent>
-                            <MudMenuItem @onclick='() => OrdenarPor("nome asc")'>Nome (A-Z)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("nome desc")'>Nome (Z-A)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("data asc")'>Data (Mais antiga)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("data desc")'>Data (Mais recente)</MudMenuItem>
-                        </ChildContent>
-                    </MudMenu>
-                </div>
+                <MudMenu>
+                    <ActivatorContent>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+                            Ordenar por
+                        </MudButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem @onclick='() => OrdenarPor("nome asc")'>Nome (A‑Z)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("nome desc")'>Nome (Z‑A)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("data asc")'>Data (Mais antiga)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("data desc")'>Data (Mais recente)</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
             </div>
         </MudPaper>
 
-        <!-- PAINEL DE FILTROS -->
+        <!-- ---------- PAINEL DE FILTROS ---------- -->
         @if (mostrarFiltros)
         {
-            <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background-color: rgba(255,255,255,1); border-radius: 12px; width: 100%;">
-                <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-2">
-                    Filtros
-                </MudText>
-                
-                <MudDivider Class="mb-4" Style="background-color: rgba(0, 0, 0, 1); height: 1px;" />
-                
+            <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:#fff;border-radius:12px">
+                <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-2">Filtros</MudText>
+                <MudDivider Class="mb-4"/>
+
                 <MudGrid GutterSize="3">
                     <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroNome" Label="Nome do projeto" Variant="Variant.Outlined" FullWidth="true" />
+                        <MudTextField @bind-Value="_filtroNome"    Label="Nome do projeto" FullWidth/>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroCliente" Label="Cliente" Variant="Variant.Outlined" FullWidth="true" />
+                        <MudTextField @bind-Value="_filtroCliente" Label="Cliente"         FullWidth/>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudStack Spacing="1">
-                            <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data inicial" Variant="Variant.Outlined" ShowToolbar="false" />
-                            <MudDatePicker @bind-Date="_filtroDataFim" Label="Data final" Variant="Variant.Outlined" ShowToolbar="false" />
+                            <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data inicial" ShowToolbar="false"/>
+                            <MudDatePicker @bind-Date="_filtroDataFim"    Label="Data final"   ShowToolbar="false"/>
                         </MudStack>
                     </MudItem>
                 </MudGrid>
-                
-                <div class="d-flex justify-end mt-4" style="gap: 1rem;">
+
+                <div class="d-flex justify-end mt-4" style="gap:1rem">
                     <MudButton Variant="Variant.Outlined" OnClick="LimparFiltros">Limpar</MudButton>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AplicarFiltros">Aplicar</MudButton>
                 </div>
             </MudPaper>
         }
 
-        <!-- LISTAGEM -->
+        <!-- ---------- LISTAGEM ---------- -->
         <MudPaper Class="pa-4 mb-6"
                   Elevation="1"
-                  Style="background-color: rgba(255,255,255,0.5); border-radius: 12px; width: 100%; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
-
+                  Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
             <MudGrid GutterSize="3">
+                <!-- Card “Novo projeto” -->
                 <MudItem xs="12" sm="6" md="3">
-                    <MudCard class="d-flex align-items-center justify-center cursor-pointer text-center"
-                             style="height: 100%; border: 2px solid var(--app-primary); border-radius: 12px;"
-                             @onclick="CriarNovoProjeto"
-                             Elevation="1">
-                        <MudCardContent class="d-flex align-items-center justify-center w-100 h-100 p-0">
-                            <MudIcon Icon="@Icons.Material.Filled.Add" Size="Size.Large" Color="Color.Primary" />
+                    <MudCard Class="d-flex align-center justify-center cursor-pointer"
+                             Style="height:100%;border:2px solid var(--mud-palette-primary);border-radius:12px"
+                             Elevation="1"
+                             @onclick="CriarNovoProjeto">
+                        <MudCardContent Class="d-flex align-center justify-center w-100 h-100 p-0">
+                            <MudIcon Icon="@Icons.Material.Filled.Add" Size="Size.Large" Color="Color.Primary"/>
                         </MudCardContent>
                     </MudCard>
                 </MudItem>
@@ -111,44 +98,46 @@
                 @if (_projetosFiltrados.Count == 0)
                 {
                     <MudItem xs="9">
-                        <MudCard class="d-flex align-items-center justify-center text-center"
-                                 style="height: 100%; background-color: #fafafa; border-radius: 12px;"
+                        <MudCard Class="d-flex align-center justify-center"
+                                 Style="height:100%;background:#fafafa;border-radius:12px"
                                  Elevation="0">
                             <MudCardContent>
-                                <MudText Typo="Typo.subtitle1" Style="color: lightblue">Não existem projetos</MudText>
+                                <MudText Typo="Typo.subtitle1" Style="color:lightblue">
+                                    Não existem projetos
+                                </MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
                 }
                 else
                 {
-                    @foreach (var projeto in _projetosFiltrados)
+                    @foreach (var p in _projetosFiltrados)
                     {
                         <MudItem xs="12" sm="6" md="3">
-                            <NavLink href="@($"/project/{projeto.IdProjeto}")" class="text-decoration-none d-block">
-                                <MudCard class="pa-3 w-100"
-                                         style="height: 100%; border-radius: 12px;"
-                                         Elevation="2">
+                            <NavLink href="@($"/project/{p.IdProjeto}")" class="text-decoration-none d-block">
+                                <MudCard Class="pa-3" Style="height:100%;border-radius:12px" Elevation="2">
                                     <MudCardContent>
-                                        <div style="display: flex; align-items: center;">
+                                        <div class="d-flex align-center">
                                             <MudText Typo="Typo.subtitle1" Color="Color.Primary">
-                                                @((projeto.Nome?.Length > 18) ? projeto.Nome.Substring(0, 18) + "..." : projeto.Nome)
+                                                @(p.Nome?.Length > 18 ? p.Nome[..18] + "..." : p.Nome)
                                             </MudText>
-                                            <MudSpacer />
-                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                                <MudIcon Icon="@Icons.Material.Filled.Event" />
-                                                <MudText Typo="Typo.caption">@projeto.DataCriacao?.ToString("dd/MM/yyyy")</MudText>
-                                            </div>
+                                            <MudSpacer/>
+                                            <MudIcon Icon="@Icons.Material.Filled.Event"/>
+                                            <MudText Typo="Typo.caption">
+                                                @p.DataCriacao?.ToString("dd/MM/yyyy")
+                                            </MudText>
                                         </div>
 
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-                                            <MudIcon Icon="@Icons.Material.Filled.Person" />
-                                            <MudText Typo="Typo.caption">@projeto.NomeCliente</MudText>
+                                        <div class="d-flex align-center gap-1 mt-2">
+                                            <MudIcon Icon="@Icons.Material.Filled.Person"/>
+                                            <MudText Typo="Typo.caption">@p.NomeCliente</MudText>
                                         </div>
 
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
-                                            <MudIcon Icon="@Icons.Material.Filled.Description" />
-                                            <MudText Typo="Typo.caption">@((projeto.Descricao?.Length > 30) ? projeto.Descricao.Substring(0, 30) + "..." : projeto.Descricao)</MudText>
+                                        <div class="d-flex align-center gap-1 mt-1">
+                                            <MudIcon Icon="@Icons.Material.Filled.Description"/>
+                                            <MudText Typo="Typo.caption">
+                                                @(p.Descricao?.Length > 30 ? p.Descricao[..30] + "..." : p.Descricao)
+                                            </MudText>
                                         </div>
                                     </MudCardContent>
                                 </MudCard>
@@ -162,36 +151,35 @@
 </div>
 
 @code {
-    private bool mostrarFiltros = false;
+    /* ---------- filtros ---------- */
+    private bool       mostrarFiltros;
+    private string     _filtroNome       = string.Empty;
+    private string     _filtroCliente    = string.Empty;
+    private DateTime?  _filtroDataInicio;
+    private DateTime?  _filtroDataFim;
 
-    private string _filtroNome = string.Empty;
-    private string _filtroCliente = string.Empty;
-    private DateTime? _filtroDataInicio = null;
-    private DateTime? _filtroDataFim = null;
+    /* ---------- dados ---------- */
+    private readonly List<ProjetoDto> _projetos          = new();
+    private List<ProjetoDto>          _projetosFiltrados = new();
 
-    private string _ordenacaoAtual = "nome asc";
-
-    private List<ProjetoDto> _projetos = new();
-    private List<ProjetoDto> _projetosFiltrados = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        await CarregarDadosAsync();
-    }
+    /* ---------- ciclo de vida ---------- */
+    protected override async Task OnInitializedAsync() => await CarregarDadosAsync();
 
     private async Task CarregarDadosAsync()
     {
         try
         {
             var token = await LocalStorage.GetItemAsync<string>("auth_token");
-            if (string.IsNullOrEmpty(token)) return;
+            if (string.IsNullOrWhiteSpace(token)) return;
 
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-            var idClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
+            var idClaim = new JwtSecurityTokenHandler()
+                          .ReadJwtToken(token)
+                          .Claims.FirstOrDefault(c => c.Type == "nameid");
 
-            if (idClaim != null && int.TryParse(idClaim.Value, out var userId))
+            if (idClaim is not null && int.TryParse(idClaim.Value, out var userId))
             {
-                _projetos = (await ProjectService.ListByUserAsync(userId))?.ToList() ?? new List<ProjetoDto>();
+                _projetos.Clear();
+                _projetos.AddRange(await ProjectService.ListByUserAsync(userId) ?? Enumerable.Empty<ProjetoDto>());
                 AplicarFiltros();
             }
         }
@@ -201,16 +189,21 @@
         }
     }
 
+    /* ---------- filtros e ordenação ---------- */
+    private string _ordenacaoAtual = "nome asc";
+
     private void AplicarFiltros()
     {
-        _projetosFiltrados = _projetos
-            .Where(p =>
-                (string.IsNullOrEmpty(_filtroNome) || p.Nome?.Contains(_filtroNome, StringComparison.OrdinalIgnoreCase) == true) &&
-                (string.IsNullOrEmpty(_filtroCliente) || p.NomeCliente?.Contains(_filtroCliente, StringComparison.OrdinalIgnoreCase) == true) &&
-                (!_filtroDataInicio.HasValue || (p.DataCriacao.HasValue && p.DataCriacao.Value.ToDateTime(TimeOnly.MinValue) >= _filtroDataInicio.Value)) &&
-                (!_filtroDataFim.HasValue || (p.DataCriacao.HasValue && p.DataCriacao.Value.ToDateTime(TimeOnly.MinValue) <= _filtroDataFim.Value))
-            )
-            .ToList();
+        _projetosFiltrados = _projetos.Where(p =>
+            (string.IsNullOrWhiteSpace(_filtroNome) ||
+                p.Nome?.Contains(_filtroNome, StringComparison.OrdinalIgnoreCase) == true) &&
+            (string.IsNullOrWhiteSpace(_filtroCliente) ||
+                p.NomeCliente?.Contains(_filtroCliente, StringComparison.OrdinalIgnoreCase) == true) &&
+            (!_filtroDataInicio.HasValue ||
+                (p.DataCriacao.HasValue && p.DataCriacao.Value >= _filtroDataInicio.Value)) &&
+            (!_filtroDataFim.HasValue ||
+                (p.DataCriacao.HasValue && p.DataCriacao.Value <= _filtroDataFim.Value))
+        ).ToList();
 
         OrdenarPor(_ordenacaoAtual);
         mostrarFiltros = false;
@@ -218,35 +211,34 @@
 
     private void LimparFiltros()
     {
-        _filtroNome = string.Empty;
-        _filtroCliente = string.Empty;
-        _filtroDataInicio = null;
-        _filtroDataFim = null;
+        _filtroNome        = string.Empty;
+        _filtroCliente     = string.Empty;
+        _filtroDataInicio  = null;
+        _filtroDataFim     = null;
         AplicarFiltros();
     }
 
     private void OrdenarPor(string criterio)
     {
-        _ordenacaoAtual = criterio;
-
+        _ordenacaoAtual    = criterio;
         _projetosFiltrados = criterio switch
         {
-            "nome asc" => _projetosFiltrados.OrderBy(p => p.Nome).ToList(),
+            "nome asc"  => _projetosFiltrados.OrderBy(p => p.Nome).ToList(),
             "nome desc" => _projetosFiltrados.OrderByDescending(p => p.Nome).ToList(),
-            "data asc" => _projetosFiltrados.OrderBy(p => p.DataCriacao).ToList(),
+            "data asc"  => _projetosFiltrados.OrderBy(p => p.DataCriacao).ToList(),
             "data desc" => _projetosFiltrados.OrderByDescending(p => p.DataCriacao).ToList(),
-            _ => _projetosFiltrados.OrderBy(p => p.Nome).ToList()
+            _           => _projetosFiltrados
         };
     }
 
+    /* ---------- criar novo ---------- */
     private async Task CriarNovoProjeto()
     {
-        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CreateProjectDialog>(
+            "Criar Projeto",
+            new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true });
 
-        var dialogReference = await DialogService.ShowAsync<CreateProjectDialog>("Criar Projeto", options);
-        var result = await dialogReference.Result;
-
-        if (!result.Canceled)
+        if (!(await dialog.Result).Canceled)
         {
             Snackbar.Add("Projeto criado com sucesso!", Severity.Success);
             await CarregarDadosAsync();

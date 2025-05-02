@@ -1,5 +1,7 @@
-﻿namespace Backend.DTOs.Utilizadores;
-using Backend.DTOs.Projeto;
+﻿using Backend.DTOs.Projetos;
+
+namespace Backend.DTOs.Utilizadores;
+using Backend.DTOs.Projetos;
 using Backend.DTOs.Membros;
 using Backend.DTOs.Tarefas;
 public class UtilizadorDetailsDto

@@ -1,4 +1,5 @@
-﻿using Backend.DTOs.Projeto;
+﻿using Backend.DTOs.Projetos;
+
 namespace Backend.Services.Interfaces;
 
 public interface IProjetoService

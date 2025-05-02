@@ -1,5 +1,6 @@
 ﻿public record UpdateProjetoDto(
-    string Nome,
+    string? Nome,
     string? NomeCliente,
     string? Descricao,
-    decimal? PrecoHora);
+    decimal? PrecoHora,
+    bool? IsDeleted);

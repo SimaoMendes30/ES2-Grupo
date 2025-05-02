@@ -1,33 +1,51 @@
-﻿namespace Backend.Services;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using Backend.DTOs.Projetos;
+using Backend.Models;
 using Backend.Repositories.Interfaces;
 using Backend.Services.Interfaces;
-using AutoMapper;
-using Backend.DTOs.Projeto;
-using Backend.Models;
+using Microsoft.Extensions.Logging;
+
+namespace Backend.Services;
+
 public sealed class ProjetoService : IProjetoService
 {
-    private readonly IProjetoRepository  _repo;
-    private readonly IMembroRepository   _membroRepo;
+    private readonly IProjetoRepository    _repo;
+    private readonly IMembroRepository     _membroRepo;
     private readonly IUtilizadorRepository _userRepo;
-    private readonly IMapper             _mapper;
-    private readonly ILogger<ProjetoService> _logger;
+    private readonly IMapper               _mapper;
+    private readonly ILogger<ProjetoService> _log;
 
-    public ProjetoService(IProjetoRepository repo, IMembroRepository membroRepo, IUtilizadorRepository userRepo,
-                          IMapper mapper, ILogger<ProjetoService> logger)
+    public ProjetoService(IProjetoRepository repo,
+                          IMembroRepository membroRepo,
+                          IUtilizadorRepository userRepo,
+                          IMapper mapper,
+                          ILogger<ProjetoService> log)
     {
         _repo       = repo;
         _membroRepo = membroRepo;
         _userRepo   = userRepo;
         _mapper     = mapper;
-        _logger     = logger;
+        _log        = log;
     }
 
-    public async Task<ProjetoDto> GetByIdAsync(int id) =>
-        _mapper.Map<ProjetoDto>(await _repo.GetByIdAsync(id));
+    /* ---------------- single ---------------- */
+    public async Task<ProjetoDto> GetByIdAsync(int id)
+    {
+        var entity = await _repo.GetByIdAsync(id);
+        if (entity is null || entity.IsDeleted) throw new KeyNotFoundException("Projeto não encontrado");
+        return _mapper.Map<ProjetoDto>(entity);
+    }
 
-    public async Task<IEnumerable<ProjetoDto>> GetByUtilizadorAsync(int utilizadorId) =>
-        _mapper.Map<IEnumerable<ProjetoDto>>(await _repo.GetByUtilizadorIdAsync(utilizadorId));
+    /* ---------------- listagem ---------------- */
+    public async Task<IEnumerable<ProjetoDto>> GetByUtilizadorAsync(int responsavelId)
+    {
+        var list = await _repo.GetByUtilizadorIdAsync(responsavelId);
+        return _mapper.Map<IEnumerable<ProjetoDto>>(list.Where(p => !p.IsDeleted));
+    }
 
+    /* ---------------- criar / alterar ---------------- */
     public async Task<ProjetoDto> CreateAsync(ProjetoCreateDto dto)
     {
         var entity = _mapper.Map<Projeto>(dto);
@@ -37,26 +55,31 @@ public sealed class ProjetoService : IProjetoService
 
     public async Task UpdateAsync(int id, UpdateProjetoDto dto)
     {
-        var entity = await _repo.GetByIdAsync(id);
-        if (entity == null) throw new KeyNotFoundException("Projeto não encontrado");
-
-        _mapper.Map(dto, entity); // mapeia apenas campos presentes
+        var entity = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException("Projeto não encontrado");
+        _mapper.Map(dto, entity);
         await _repo.UpdateAsync(entity);
     }
 
-    public async Task DeleteAsync(int id) => await _repo.DeleteAsync(id);
+    /* ---------------- soft‑delete ---------------- */
+    public async Task DeleteAsync(int id)
+    {
+        var entity = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException("Projeto não encontrado");
+        entity.IsDeleted = true;
+        await _repo.UpdateAsync(entity);          // grava a flag em vez de eliminar
+    }
 
+    /* ---------------- convites ---------------- */
     public async Task ConvidarUtilizadorAsync(int projetoId, string username)
     {
-        var utilizador = await _userRepo.GetByUsernameAsync(username) ??
-                         throw new InvalidOperationException("Utilizador não encontrado");
+        var user = await _userRepo.GetByUsernameAsync(username)
+                   ?? throw new InvalidOperationException("Utilizador não encontrado");
 
         var membro = new Membro
         {
             IdProjeto     = projetoId,
-            IdUtilizador  = utilizador.IdUtilizador,
+            IdUtilizador  = user.IdUtilizador,
             EstadoConvite = "Pendente",
-            DataConvite   = DateOnly.FromDateTime(DateTime.UtcNow)
+            DataConvite   = DateTime.UtcNow
         };
         await _membroRepo.AddAsync(membro);
     }
