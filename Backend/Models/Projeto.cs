@@ -15,13 +15,15 @@ public partial class Projeto
 
     public decimal? PrecoHora { get; set; }
 
-    public int IdUtilizador { get; set; }
+    public int Responsavel { get; set; }
 
     public DateOnly? DataCriacao { get; set; }
 
-    public virtual Utilizador IdUtilizadorNavigation { get; set; } = null!;
+    public bool IsDeleted { get; set; }
 
     public virtual ICollection<Membro> Membros { get; set; } = new List<Membro>();
+
+    public virtual Utilizador ResponsavelNavigation { get; set; } = null!;
 
     public virtual ICollection<Tarefa> IdTarefas { get; set; } = new List<Tarefa>();
 }
