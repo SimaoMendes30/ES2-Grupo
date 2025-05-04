@@ -1,9 +1,10 @@
-﻿@using Frontend.DTOs.Projetos
-@using MudBlazor
+﻿@using MudBlazor
 @using System.ComponentModel.DataAnnotations
 @using System.Net
 @using Frontend.Services
+@using Frontend.DTOs.Project
 @using Microsoft.AspNetCore.Components.Forms
+@inject ISnackbar Snackbar
 
 <MudDialog>
     <DialogContent>
@@ -16,14 +17,14 @@
                               Variant="Variant.Outlined"
                               @bind-Value="Projeto.Nome"
                               Required="true"
-                              FullWidth="true"/>
+                              FullWidth="true" />
 
                 <MudTextField T="string"
                               Label="Nome do Cliente"
                               Variant="Variant.Outlined"
                               @bind-Value="Projeto.NomeCliente"
                               Required="true"
-                              FullWidth="true"/>
+                              FullWidth="true" />
 
                 <MudTextField T="string"
                               Label="Descrição"
@@ -31,7 +32,7 @@
                               @bind-Value="Projeto.Descricao"
                               TextArea="true"
                               Lines="3"
-                              FullWidth="true"/>
+                              FullWidth="true" />
 
                 <MudNumericField T="decimal?"
                                  Label="Preço/Hora (€)"
@@ -39,7 +40,7 @@
                                  @bind-Value="Projeto.PrecoHora"
                                  Min="0"
                                  DecimalPlaces="2"
-                                 FullWidth="true"/>
+                                 FullWidth="true" />
             </MudStack>
 
             <ValidationSummary />
@@ -54,9 +55,9 @@
 
 @code {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
-    [Inject] private ProjetoService ProjetoService { get; set; } = default!;
+    [Inject] private ProjectService ProjetoService { get; set; } = default!;
 
-    private ProjetoCreateDto Projeto { get; set; } = new();
+    private ProjectCreateDto Projeto { get; set; } = new();
     private EditContext editContext = default!;
 
     protected override void OnInitialized()
@@ -68,11 +69,15 @@
     {
         if (editContext.Validate())
         {
-            var success = await ProjetoService.CreateAsync(Projeto);
-            if (success)
-                MudDialog.Close(DialogResult.Ok(Projeto));
-            else
-                MudDialog.Close(DialogResult.Cancel()); // ou notificar erro
+            try
+            {
+                var criado = await ProjetoService.CreateAsync(Projeto);
+                MudDialog.Close(DialogResult.Ok(criado));
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Erro ao criar projeto: {ex.Message}", Severity.Error);
+            }
         }
     }
 

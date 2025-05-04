@@ -3,9 +3,9 @@
 
 @using System.IdentityModel.Tokens.Jwt
 @using Blazored.LocalStorage
-@using Frontend.DTOs.Utilizadores
-@using MudBlazor
-@inject HttpClient Http
+@using Frontend.DTOs.User
+@using Frontend.Services
+@inject UserService UserService
 @inject ILocalStorageService LocalStorage
 @inject ISnackbar Snackbar
 @inject NavigationManager Nav
@@ -17,29 +17,36 @@
 
     <EditForm Model="_updateDto" OnValidSubmit="HandleUpdate">
         <DataAnnotationsValidator />
+
         <MudTextField @bind-Value="_updateDto.Nome"
                       Label="Nome"
                       Variant="Variant.Outlined"
-                      FullWidth="true"
-                      Required="true"
+                      FullWidth
+                      Required
                       Class="mb-3" />
+
         <MudTextField @bind-Value="_updateDto.Username"
                       Label="Username"
                       Variant="Variant.Outlined"
-                      FullWidth="true"
-                      Required="true"
+                      FullWidth
+                      Required
                       Class="mb-3" />
+
+        <MudNumericField T="int?" @bind-Value="_updateDto.NumHoras"
+                         Label="N.º de horas"
+                         Variant="Variant.Outlined"
+                         FullWidth
+                         Class="mb-4" />
 
         <MudButton ButtonType="ButtonType.Submit"
                    Variant="Variant.Filled"
                    Color="Color.Primary"
                    Disabled="_loadingProfile"
-                   Class="mb-4"
-                   FullWidth="true">
+                   FullWidth>
             @if (_loadingProfile)
             {
                 <MudProgressCircular Size="Size.Small" Class="mr-2" />
-                <span>Gravando…</span>
+                <span>A gravar…</span>
             }
             else
             {
@@ -47,107 +54,77 @@
             }
         </MudButton>
     </EditForm>
-
-    <MudDivider Class="my-6" />
-
-    <MudText Typo="Typo.h5" Class="mb-4" Color="Color.Primary">Alterar Password</MudText>
-
-    <EditForm Model="_pwdDto" OnValidSubmit="HandleChangePassword">
-        <DataAnnotationsValidator />
-        <MudTextField @bind-Value="_pwdDto.OldPassword"
-                      Label="Password Atual"
-                      Variant="Variant.Outlined"
-                      FullWidth="true"
-                      Required="true"
-                      InputType="InputType.Password"
-                      Class="mb-3" />
-        <MudTextField @bind-Value="_pwdDto.NewPassword"
-                      Label="Nova Password"
-                      Variant="Variant.Outlined"
-                      FullWidth="true"
-                      Required="true"
-                      InputType="InputType.Password"
-                      Class="mb-3" />
-        <MudTextField @bind-Value="_pwdDto.NewPassword"
-                      Label="Confirmar Nova Password"
-                      Variant="Variant.Outlined"
-                      FullWidth="true"
-                      Required="true"
-                      InputType="InputType.Password"
-                      Class="mb-4" />
-
-        <MudButton ButtonType="ButtonType.Submit"
-                   Variant="Variant.Filled"
-                   Color="Color.Secondary"
-                   Disabled="_loadingPassword"
-                   FullWidth="true">
-            @if (_loadingPassword)
-            {
-                <MudProgressCircular Size="Size.Small" Class="mr-2" />
-                <span>Gravando…</span>
-            }
-            else
-            {
-                <span>Alterar Password</span>
-            }
-        </MudButton>
-    </EditForm>
 </MudPaper>
 
 @code {
-    private UtilizadorUpdateDto         _updateDto        = new();
-    private UtilizadorUpdatePasswordDto _pwdDto           = new();
-    private bool                        _loadingProfile   = false;
-    private bool                        _loadingPassword  = false;
-    private int                         _userId;
+    private UserUpdateDto _updateDto = new();
+    private bool _loadingProfile = false;
+    private int? _userId;
 
     protected override async Task OnInitializedAsync()
     {
         var token = await LocalStorage.GetItemAsync<string>("auth_token");
-        if (string.IsNullOrEmpty(token))
+        if (string.IsNullOrWhiteSpace(token))
         {
             Nav.NavigateTo("/login");
             return;
         }
+
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
         var idClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
+
         if (idClaim != null && int.TryParse(idClaim.Value, out var uid))
         {
             _userId = uid;
             await LoadCurrentProfileAsync();
         }
+        else
+        {
+            Snackbar.Add("Não foi possível obter o utilizador autenticado.", Severity.Error);
+            Nav.NavigateTo("/login");
+        }
     }
 
     private async Task LoadCurrentProfileAsync()
     {
+        if (!_userId.HasValue)
+            return;
+
         try
         {
-            var dto = await Http.GetFromJsonAsync<UtilizadorDetailsDto>($"api/utilizador/{_userId}");
+            var dto = await UserService.GetByIdAsync(_userId.Value);
             if (dto != null)
             {
-                _updateDto.Nome     = dto.Nome;
-                _updateDto.Username = dto.Username;
+                _updateDto = new UserUpdateDto
+                {
+                    Nome = dto.Nome,
+                    Username = dto.Username,
+                    NumHoras = dto.NumHoras
+                };
             }
         }
         catch
         {
-            Snackbar.Add("Erro ao carregar perfil.", Severity.Error);
+            Snackbar.Add("Erro ao carregar o perfil.", Severity.Error);
         }
     }
 
     private async Task HandleUpdate()
     {
+        if (!_userId.HasValue)
+        {
+            Snackbar.Add("Utilizador inválido.", Severity.Error);
+            return;
+        }
+
         _loadingProfile = true;
         try
         {
-            var resp = await Http.PutAsJsonAsync($"api/utilizador/{_userId}/password", _pwdDto);
-            if (resp.IsSuccessStatusCode)
+            var result = await UserService.UpdateAsync(_userId.Value, _updateDto);
+            if (result)
                 Snackbar.Add("Perfil atualizado com sucesso!", Severity.Success);
             else
-            {
-                var err = await resp.Content.ReadAsStringAsync();
-                Snackbar.Add($"Falha ao atualizar perfil: {err}", Severity.Error);
-            }
+                Snackbar.Add("Erro ao atualizar perfil.", Severity.Error);
         }
         catch (Exception ex)
         {
@@ -156,33 +133,6 @@
         finally
         {
             _loadingProfile = false;
-        }
-    }
-
-    private async Task HandleChangePassword()
-    {
-        _loadingPassword = true;
-        try
-        {
-            var resp = await Http.PutAsJsonAsync($"api/utilizador/{_userId}/password", _pwdDto);
-            if (resp.IsSuccessStatusCode)
-            {
-                Snackbar.Add("Password alterada com sucesso!", Severity.Success);
-                _pwdDto = new UtilizadorUpdatePasswordDto(); // limpa o formulário
-            }
-            else
-            {
-                var err = await resp.Content.ReadAsStringAsync();
-                Snackbar.Add($"Falha ao alterar password: {err}", Severity.Error);
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Erro: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            _loadingPassword = false;
         }
     }
 }

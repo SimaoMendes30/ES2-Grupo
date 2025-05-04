@@ -1,12 +1,19 @@
 using System.Text;
-using Backend.AutoMapperProfiles;
-using Backend.Domain.Strategies;
+using Backend.Domain.Patterns.Builders;
+using Backend.Domain.Patterns.Builders.Interfaces;
+using Backend.Domain.Patterns.Strategies;
+using Backend.Domain.Patterns.Strategies.Interfaces;
+using Backend.Domain.Security;
+using Backend.Dtos;
+using Backend.Features.Member;
+using Backend.Features.Member.Interfaces;
+using Backend.Features.Project;
+using Backend.Features.Project.Interfaces;
+using Backend.Features.Task;
+using Backend.Features.Task.Interfaces;
+using Backend.Features.User;
+using Backend.Features.User.Interfaces;
 using Backend.Models;
-using Backend.Repositories;
-using Backend.Repositories.Interfaces;
-using Backend.Security;
-using Backend.Services;
-using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,22 +48,24 @@ builder.Services.AddAuthorization(opts =>
 });
 
 // ────────────  DbContext / Repositórios / Serviços  ───────────
-builder.Services.AddDbContextFactory<sgscDbContext>(o =>
+builder.Services.AddDbContextFactory<SgscDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUtilizadorRepository, UtilizadorRepository>();
-builder.Services.AddScoped<IProjetoRepository   , ProjetoRepository>();
-builder.Services.AddScoped<IMembroRepository    , MembroRepository>();
-builder.Services.AddScoped<ITarefaRepository    , TarefaRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
-builder.Services.AddScoped<IPrecoTarefaStrategy, DefaultPrecoStrategy>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
-builder.Services.AddScoped<IUtilizadorService, UtilizadorService>();
-builder.Services.AddScoped<IProjetoService   , ProjetoService>();
-builder.Services.AddScoped<IMembroService    , MembroService>();
-builder.Services.AddScoped<ITarefaService    , TarefaService>();
+builder.Services.AddScoped<IJwtTokenBuilder, JwtTokenBuilder>();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<IRoleStrategy, DefaultRoleStrategy>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -109,12 +118,12 @@ var app = builder.Build();
 // ────────────────────  Seed primeiro Admin  ───────────────────
 using (var scope = app.Services.CreateScope())
 {
-    var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<sgscDbContext>>();
+    var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<SgscDbContext>>();
     await using var ctx = await factory.CreateDbContextAsync();
 
     if (!ctx.Utilizadors.Any())
     {
-        ctx.Utilizadors.Add(new Utilizador
+        ctx.Utilizadors.Add(new UserEntity
         {
             Nome      = "Administrador-Raiz",
             Username  = "admin",

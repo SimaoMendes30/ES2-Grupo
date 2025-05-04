@@ -1,7 +1,8 @@
-﻿@using Frontend.DTOs.Tarefas
-@using MudBlazor
+﻿@using MudBlazor
 @using System.ComponentModel.DataAnnotations
+@using Frontend.DTOs.Task
 @using Microsoft.AspNetCore.Components.Forms
+@using Frontend.Services
 
 <MudDialog>
     <DialogContent>
@@ -9,18 +10,21 @@
             <DataAnnotationsValidator />
 
             <MudStack Spacing="2">
+                <!-- Título -->
                 <MudTextField T="string"
                               Label="Título"
                               Variant="Variant.Outlined"
                               @bind-Value="Tarefa.Titulo"
                               Required="true"
                               FullWidth="true"/>
+
                 <!-- Descrição -->
                 <MudTextField T="string"
                               Label="Descrição"
                               Variant="Variant.Outlined"
                               @bind-Value="Tarefa.Descricao"
-                              Required="true"
+                              TextArea="true"
+                              Lines="3"
                               FullWidth="true"/>
 
                 <!-- Preço por hora -->
@@ -39,26 +43,42 @@
 
     <DialogActions>
         <MudButton OnClick="@Cancel">Cancelar</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@Submit">Criar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@SubmitAsync">Criar</MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Inject] private TaskService TaskService { get; set; } = default!;
+    [Inject] private ISnackbar Snackbar { get; set; } = default!;
 
-    private TarefaCreateDto Tarefa { get; set; } = new();
+    private TaskCreateDto Tarefa { get; set; } = new();
     private EditContext editContext = default!;
+    private bool _submitting = false;
 
     protected override void OnInitialized()
     {
         editContext = new EditContext(Tarefa);
     }
 
-    private void Submit()
+    private async Task SubmitAsync()
     {
-        if (editContext.Validate())
+        if (!editContext.Validate()) return;
+
+        _submitting = true;
+        try
         {
-            MudDialog.Close(DialogResult.Ok(Tarefa));
+            var result = await TaskService.CreateAsync(Tarefa);
+            Snackbar.Add("Tarefa criada com sucesso!", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(result));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao criar tarefa: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _submitting = false;
         }
     }
 

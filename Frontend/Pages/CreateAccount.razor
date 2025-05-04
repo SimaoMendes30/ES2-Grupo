@@ -1,9 +1,11 @@
 ﻿@page "/create-account"
 @layout SubMainLayout
-@inject HttpClient Http
 @inject NavigationManager Navigation
-@using Frontend.DTOs.Utilizadores
 @inject IJSRuntime JSRuntime
+@inject UserService UserService
+
+@using Frontend.DTOs.User
+@using Frontend.Services
 
 <PageTitle>Criar Conta</PageTitle>
 
@@ -36,7 +38,7 @@
                                       Variant="Variant.Outlined"
                                       FullWidth="true"
                                       Required="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Email"
+                                      AdornmentIcon="@Icons.Material.Filled.Person"
                                       Class="mb-4"/>
 
                         <MudTextField @bind-Value="_utilizadorDto.Username"
@@ -44,7 +46,7 @@
                                       Variant="Variant.Outlined"
                                       FullWidth="true"
                                       Required="true"
-                                      AdornmentIcon="@Icons.Material.Filled.Email"
+                                      AdornmentIcon="@Icons.Material.Filled.AccountCircle"
                                       Class="mb-4"/>
 
                         <MudTextField @bind-Value="_utilizadorDto.Password"
@@ -86,7 +88,7 @@
                             }
                             else
                             {
-                                <span>Iniciar Sessão</span>
+                                <span>Criar Conta</span>
                             }
                         </MudButton>
 
@@ -115,53 +117,31 @@
 </div>
 
 @code {
-    private UtilizadorCreateDto _utilizadorDto = new();
+    private UserCreateDto _utilizadorDto = new();
     private int _tipoSelecionado;
-    private string _password = "";
     private string _errorMessage = string.Empty;
-    private string _successMessage = string.Empty;
     private bool _isProcessing;
 
     private async Task HandleRegister()
     {
         if (_isProcessing) return;
 
-        _isProcessing = true;   
+        _isProcessing = true;
         _errorMessage = string.Empty;
-        _successMessage = string.Empty;
-        StateHasChanged(); 
+        StateHasChanged();
 
-        switch (_tipoSelecionado){
-            case 1:
-                _utilizadorDto.SuperUser = true;
-                break;
-                
-            case 2:
-                _utilizadorDto.Admin = true;
-                break;
-        }
-        
-        _utilizadorDto.Password = _password;
+        _utilizadorDto.SuperUser = _tipoSelecionado == 1;
+        _utilizadorDto.Admin = _tipoSelecionado == 2;
 
         try
         {
-            var response = await Http.PostAsJsonAsync("api/utilizador/criar", _utilizadorDto);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            {
-                _successMessage = "Conta criada com sucesso! Pode agora clicar em 'Entrar' para iniciar sessão.";
-                await Task.Delay(2000);
-                Navigation.NavigateTo("/login");
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                _errorMessage = $"Erro ao criar conta: {content}";
-            }
+            var user = await UserService.CreateAsync(_utilizadorDto);
+            await JSRuntime.InvokeVoidAsync("alert", "Conta criada com sucesso!");
+            Navigation.NavigateTo("/login");
         }
         catch (Exception ex)
         {
-            _errorMessage = $"Erro: {ex.Message}";
+            _errorMessage = $"Erro ao criar conta: {ex.Message}";
         }
         finally
         {
@@ -169,5 +149,4 @@
             StateHasChanged();
         }
     }
-}
 }

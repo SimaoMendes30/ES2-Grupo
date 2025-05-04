@@ -3399,10 +3399,10 @@ C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\refint\Frontend.dll
 C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\Frontend.pdb
 C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\ref\Frontend.dll
 C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\Frontend.sourcelink.json
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.6hjr4zbxuu.pdb
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.kz608c7dtm.wasm
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.6hjr4zbxuu.pdb.gz
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.kz608c7dtm.wasm.gz
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\idv3gmpu33-kz608c7dtm.gz
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\820j4a4l7m-6hjr4zbxuu.gz
-C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\njn95cf9xo-qwbsdarljj.gz
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.1e1fe17uwd.pdb
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.kpnmqxdslk.wasm
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.1e1fe17uwd.pdb.gz
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\bin\Debug\net9.0\wwwroot\_framework\Frontend.kpnmqxdslk.wasm.gz
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\idv3gmpu33-kpnmqxdslk.gz
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\820j4a4l7m-1e1fe17uwd.gz
+C:\Users\diogo\Desktop\ESII_SGSC\Frontend\obj\Debug\net9.0\compressed\njn95cf9xo-ucfu4fryjd.gz

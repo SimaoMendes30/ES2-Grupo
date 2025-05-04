@@ -1,178 +1,179 @@
 ﻿@page "/tasks"
 @using System.IdentityModel.Tokens.Jwt
 @using Blazored.LocalStorage
-@using Frontend.Components.Projetos
 @using Frontend.Components.Tarefa
-@using Frontend.DTOs.Tarefas
+@using Frontend.DTOs.Task
 @using Frontend.Services
-@using MudBlazor
 @layout WorkspaceLayout
 
-@inject TarefaService TarefaService
+@inject TaskService TaskService
 @inject ILocalStorageService LocalStorage
-@inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 
 <PageTitle>Tarefas</PageTitle>
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding-top: 2rem;">
-    <div style="width: 90%;">
-        
-        <!-- CABEÇALHO -->
+<!-- Cabeçalho -->
+<div class="d-flex flex-column align-center justify-center w-100 pt-8">
+    <div style="width:90%">
+        <!-- Filtros / Ordenação -->
         <MudPaper Class="pa-4 mb-6 d-flex align-items-center justify-between"
                   Elevation="1"
-                  Style="background-color: rgba(255,255,255,1); border-radius: 12px; width: 100%; min-height: 120px;">
+                  Style="background:#fff;border-radius:12px;min-height:120px">
+            <MudText Typo="Typo.h4" Class="mb-0" Color="Color.Primary">Tarefas</MudText>
+            <MudSpacer/>
 
-            <!-- Título à esquerda -->
-            <MudText Typo="Typo.h4" Class="mb-0 text-start" Color="Color.Primary">
-                Tarefas
-            </MudText>
-            
-            <MudSpacer />
-
-            <!-- Ações à direita -->
-            <div style="display: flex; align-items: center; gap: 2rem;">
-        
+            <div class="d-flex align-center" style="gap:2rem">
                 <!-- Filtros -->
-                <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"
+                <div class="d-flex align-center" style="gap:.5rem;cursor:pointer"
                      @onclick="() => mostrarFiltros = !mostrarFiltros">
-                    <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary" />
+                    <MudIcon Icon="@Icons.Material.Filled.FilterList" Color="Color.Primary"/>
                     <MudText Typo="Typo.subtitle2" Color="Color.Primary">Filtros</MudText>
                 </div>
 
                 <!-- Ordenação -->
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <MudMenu>
-                        <ActivatorContent>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowDropDown">
-                                Ordenar por
-                            </MudButton>
-                        </ActivatorContent>
-
-                        <ChildContent>
-                            <MudMenuItem @onclick='() => OrdenarPor("descricao asc")'>Descrição (A-Z)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("descricao desc")'>Descrição (Z-A)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("data asc")'>Data (Mais antiga)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("data desc")'>Data (Mais recente)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("estado asc")'>Estado (↑)</MudMenuItem>
-                            <MudMenuItem @onclick='() => OrdenarPor("estado desc")'>Estado (↓)</MudMenuItem>
-                        </ChildContent>
-                    </MudMenu>
-                </div>
+                <MudMenu>
+                    <ActivatorContent>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+                            Ordenar por
+                        </MudButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem @onclick='() => OrdenarPor("titulo asc")'>Título (A-Z)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("titulo desc")'>Título (Z-A)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("dataInicio asc")'>Data Início (Mais antiga)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("dataInicio desc")'>Data Início (Mais recente)</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
             </div>
         </MudPaper>
 
-        <!-- FILTROS -->
+        <!-- Painel de Filtros -->
         @if (mostrarFiltros)
         {
-            <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background-color: white; border-radius: 12px;">
+            <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:#fff;border-radius:12px">
                 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-2">Filtros</MudText>
                 <MudDivider Class="mb-4"/>
 
                 <MudGrid GutterSize="3">
                     <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroDescricao" Label="Descrição" Variant="Variant.Outlined" FullWidth="true"/>
+                        <MudTextField @bind-Value="_filtroTitulo" Label="Título da Tarefa" FullWidth/>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudAutocomplete T="string" Label="Projeto" Variant="Variant.Outlined" @bind-Value="_filtroProjeto"/>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudSelect T="string"
-                                   Label="Estado"
-                                   Variant="Variant.Outlined"
-                                   @bind-Value="_filtroEstado">
-
-                            @foreach (var kvp in OrdemEstados.OrderBy(k => k.Value))
-                            {
-                                <MudSelectItem Value="@kvp.Key">@kvp.Key</MudSelectItem>
-                            }
+                        <MudSelect T="string?" @bind-Value="_filtroResponsavel" Label="Selecionar Responsabilidade" FullWidth>
+                            <MudSelectItem Value="_states[0]">As minhas Tarefas</MudSelectItem>
+                            <MudSelectItem Value="_states[1]">As Tarefas associadas</MudSelectItem>
+                            <MudSelectItem Value="_states[2]">Todas as Tarefas</MudSelectItem>
                         </MudSelect>
-
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudStack Spacing="1">
-                            <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data inicial" Variant="Variant.Outlined"/>
-                            <MudDatePicker @bind-Date="_filtroDataFim" Label="Data final" Variant="Variant.Outlined"/>
+                            <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data Início" ShowToolbar="false"/>
+                            <MudDatePicker @bind-Date="_filtroDataFim" Label="Data Fim" ShowToolbar="false"/>
                         </MudStack>
                     </MudItem>
                 </MudGrid>
 
-                <div class="d-flex justify-end mt-4" style="gap: 1rem;">
+                <div class="d-flex justify-end mt-4" style="gap:1rem">
                     <MudButton Variant="Variant.Outlined" OnClick="LimparFiltros">Limpar</MudButton>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AplicarFiltros">Aplicar</MudButton>
                 </div>
             </MudPaper>
         }
 
-        <!-- LISTAGEM -->
-        <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background-color: rgba(255,255,255,0.5); border-radius: 12px;">
+        <!-- Listagem de Tarefas -->
+        <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
             <MudGrid GutterSize="3">
                 <MudItem xs="12" sm="6" md="3">
-                    <MudCard class="d-flex align-items-center justify-center cursor-pointer text-center"
-                             style="height: 100%; border: 2px solid var(--app-primary); border-radius: 12px;"
-                             @onclick="CriarNovaTarefa"
-                             Elevation="1">
-                        <MudCardContent class="d-flex align-items-center justify-center w-100 h-100 p-0">
+                    <MudCard Class="d-flex align-center justify-center cursor-pointer"
+                             Style="height:100%;border:2px solid var(--mud-palette-primary);border-radius:12px"
+                             Elevation="1"
+                             @onclick="CriarNovaTarefa">
+                        <MudCardContent Class="d-flex align-center justify-center w-100 h-100 p-0">
                             <MudIcon Icon="@Icons.Material.Filled.Add" Size="Size.Large" Color="Color.Primary"/>
                         </MudCardContent>
                     </MudCard>
                 </MudItem>
 
-                @if (_tarefasFiltradas.Count == 0)
+                @if (_tarefas.Count == 0)
                 {
                     <MudItem xs="9">
-                        <MudCard Class="d-flex align-items-center justify-center text-center"
-                                 Style="height: 100%; background-color: #fafafa; border-radius: 12px;" Elevation="0">
+                        <MudCard Class="d-flex align-center justify-center" Style="height:100%;background:#fafafa;border-radius:12px" Elevation="0">
                             <MudCardContent>
-                                <MudText Typo="Typo.subtitle1" Style="color: lightblue">Não existem tarefas</MudText>
+                                <MudText Typo="Typo.subtitle1" Style="color:lightblue">Não existem tarefas</MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
                 }
                 else
                 {
-                    @foreach (var t in _tarefasFiltradas)
+                    @foreach (var t in _tarefas)
                     {
                         <MudItem xs="12" sm="6" md="3">
-                            <MudCard Class="pa-3 w-100" Style="height: 100%; border-radius: 12px;" Elevation="2">
-                                <MudCardContent>
-                                    <MudText Typo="Typo.subtitle1" Color="Color.Secondary">@t.Descricao</MudText>
-                                    <MudText Typo="Typo.caption"><b>Início:</b> @t.DataInicio.ToString("dd/MM/yyyy")</MudText>
-                                    <MudText Typo="Typo.caption"><b>Estado:</b> @t.Estado</MudText>
-                                </MudCardContent>
-                            </MudCard>
+                            <NavLink href="@($"/task/{t.IdTarefa}")" class="text-decoration-none d-block">
+                                <MudCard Class="pa-3" Style="height:100%;border-radius:12px" Elevation="2">
+                                    <MudCardContent>
+                                        <div class="d-flex align-center">
+                                            <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+                                                @(t.Titulo?.Length > 18 ? t.Titulo[..18] + "..." : t.Titulo)
+                                            </MudText>
+                                            <MudSpacer/>
+                                            <MudIcon Icon="@Icons.Material.Filled.Event"/>
+                                            <MudText Typo="Typo.caption">@t.DataInicio.ToString("dd/MM/yyyy")</MudText>
+                                        </div>
+
+                                        <div class="d-flex align-center gap-1 mt-2">
+                                            <MudIcon Icon="@Icons.Material.Filled.Person"/>
+                                            <MudText Typo="Typo.caption">@t.Responsavel</MudText>
+                                        </div>
+
+                                        <div class="d-flex align-center gap-1 mt-1">
+                                            <MudIcon Icon="@Icons.Material.Filled.Description"/>
+                                            <MudText Typo="Typo.caption">
+                                                @(t.Descricao?.Length > 30 ? t.Descricao[..30] + "..." : t.Descricao)
+                                            </MudText>
+                                        </div>
+                                    </MudCardContent>
+                                </MudCard>
+                            </NavLink>
                         </MudItem>
                     }
                 }
             </MudGrid>
         </MudPaper>
+
+        <!-- Paginação -->
+        <MudPaper Class="pa-4 mb-6 d-flex align-items-center justify-center" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
+            <MudPagination ShowPageButtons="true" 
+                           ShowFirstButton="true" 
+                           ShowLastButton="true" 
+                           Count="@_totalCount" 
+                           BoundaryCount="1"
+                           MiddleCount="2"
+                           Size="Size.Medium"
+                           Color="Color.Primary"
+                           SelectedChanged="async (page) => await MudarPagina(page)" />
+        </MudPaper>
     </div>
 </div>
 
 @code {
+    private readonly string[] _states = {"sim", "nao", ""};
+    private List<TaskDetailsDto> _tarefas = new();
+    private int _paginaAtual = 1;
+    private int _tamanhoPagina = 6;
+    private int _totalCount = 0;
+
+    private string _ordenacao = "descricao";
+    private bool _descendente = false;
+    
+    private string? _filtroResponsavel;
     private bool mostrarFiltros = false;
+    private string? _filtroTitulo;
+    private DateTime? _filtroDataInicio;
+    private DateTime? _filtroDataFim;
 
-    private string _filtroDescricao = string.Empty;
-    private string _filtroProjeto = string.Empty;
-    private string _filtroEstado = string.Empty;
-    private DateTime? _filtroDataInicio = null;
-    private DateTime? _filtroDataFim = null;
-
-    private string _ordenacaoAtual = "descricao asc";
-    private List<TarefaDto> _tarefas = new();
-    private List<TarefaDto> _tarefasFiltradas = new();
-
-    private static readonly Dictionary<string, int> OrdemEstados = new()
-    {
-        ["Em Curso"] = 1,
-        ["Finalizada"] = 2
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        await CarregarDadosAsync();
-    }
+    protected override async Task OnInitializedAsync() => await CarregarDadosAsync();
 
     private async Task CarregarDadosAsync()
     {
@@ -186,9 +187,31 @@
 
             if (idClaim != null && int.TryParse(idClaim.Value, out var userId))
             {
-                var lista = await TarefaService.ListByUserAsync(userId);
-                _tarefas = lista?.ToList() ?? new();
-                AplicarFiltros();
+                // Definir o filtro de Responsável com base na seleção do utilizador
+                int? responsavel = null;
+                if (_filtroResponsavel == "sim")
+                {
+                    responsavel = userId; 
+                }
+                else if (_filtroResponsavel == "nao")
+                {
+                    responsavel = userId == 0 ? null : -userId;
+                } else
+                {
+                    responsavel = null; 
+                }
+
+                var filtros = new TaskFilterDto
+                {
+                    Titulo = _filtroTitulo,
+                    Responsavel = responsavel, 
+                    DataInicioDe = _filtroDataInicio,
+                    DataInicioAte = _filtroDataFim
+                };
+
+                var paged = await TaskService.GetByUserPagedAsync(userId, _paginaAtual, _tamanhoPagina, _ordenacao, _descendente, filtros);
+                _tarefas = paged.Items.ToList();
+                _totalCount = paged.TotalCount;
             }
         }
         catch
@@ -196,50 +219,21 @@
             Snackbar.Add("Erro ao carregar tarefas.", Severity.Error);
         }
     }
-
-    private void AplicarFiltros()
-    {
-        _tarefasFiltradas = _tarefas.Where(t =>
-            (string.IsNullOrWhiteSpace(_filtroDescricao) ||
-             t.Descricao.Contains(_filtroDescricao, StringComparison.OrdinalIgnoreCase)) &&
-
-            (string.IsNullOrWhiteSpace(_filtroEstado) || t.Estado == _filtroEstado) &&
-
-            (!_filtroDataInicio.HasValue ||
-             t.DataInicio.Date >= _filtroDataInicio.Value.Date) &&
-
-            (!_filtroDataFim.HasValue ||
-             t.DataInicio.Date <= _filtroDataFim.Value.Date)
-        ).ToList();
-
-        OrdenarPor(_ordenacaoAtual);
-        mostrarFiltros = false;
-    }
     
-    private void LimparFiltros()
+    private void OrdenarPor(string campo)
     {
-        _filtroDescricao = string.Empty;
-        _filtroProjeto = string.Empty;
-        _filtroEstado = string.Empty;
-        _filtroDataInicio = null;
-        _filtroDataFim = null;
-        AplicarFiltros();
-    }
-
-    private void OrdenarPor(string criterio)
-    {
-        _ordenacaoAtual = criterio;
-
-        _tarefasFiltradas = criterio switch
+        if (_ordenacao == campo)
         {
-            "descricao asc" => _tarefasFiltradas.OrderBy(t => t.Descricao).ToList(),
-            "descricao desc" => _tarefasFiltradas.OrderByDescending(t => t.Descricao).ToList(),
-            "data asc" => _tarefasFiltradas.OrderBy(t => t.DataInicio).ToList(),
-            "data desc" => _tarefasFiltradas.OrderByDescending(t => t.DataInicio).ToList(),
-            "estado asc" => _tarefasFiltradas.OrderBy(t => OrdemEstados.TryGetValue(t.Estado, out var ordem) ? ordem : 999).ToList(),
-            "estado desc" => _tarefasFiltradas.OrderByDescending(t => OrdemEstados.TryGetValue(t.Estado, out var ordem) ? ordem : 999).ToList(),
-            _ => _tarefasFiltradas.OrderBy(t => t.Descricao).ToList()
-        };
+            _descendente = !_descendente;
+        }
+        else
+        {
+            _ordenacao = campo;
+            _descendente = false;
+        }
+
+        _paginaAtual = 1;
+        _ = CarregarDadosAsync();
     }
 
     private async Task CriarNovaTarefa()
@@ -253,5 +247,27 @@
             Snackbar.Add("Tarefa criada com sucesso!", Severity.Success);
             await CarregarDadosAsync();
         }
+    }
+
+    private async Task MudarPagina(int novaPagina)
+    {
+        _paginaAtual = novaPagina;
+        await CarregarDadosAsync();
+    }
+
+    private async Task AplicarFiltros()
+    {
+        _paginaAtual = 1;
+        await CarregarDadosAsync();
+    }
+
+    private async Task LimparFiltros()
+    {
+        _filtroTitulo = null;
+        _filtroResponsavel = null;
+        _filtroDataInicio = null;
+        _filtroDataFim = null;
+        _paginaAtual = 1;
+        await CarregarDadosAsync();
     }
 }

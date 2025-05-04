@@ -1,16 +1,15 @@
-﻿@using System.IdentityModel.Tokens.Jwt
-@using System.Security.Claims
+﻿
+@using System.IdentityModel.Tokens.Jwt
 @using Blazored.LocalStorage
 @using Frontend.Services
 @using Microsoft.Extensions.Logging
-@using static Themes.SGSCThemes
-@using Frontend.Components
 @inherits LayoutComponentBase
 
 @inject ILocalStorageService LocalStorage
-@inject UtilizadorService UserService
+@inject UserService UserService
 @inject NavigationManager NavigationManager
 @inject AuthService AuthService
+@inject ILogger<WorkspaceLayout> Logger
 
 <div class="page-container">
     <MudLayout>
@@ -108,7 +107,7 @@
 
             if (idClaim != null && int.TryParse(idClaim.Value, out var userId))
             {
-                var user = await UserService.GetAsync(userId);
+                var user = await UserService.GetByIdAsync(userId); // CORREÇÃO AQUI
                 if (user != null && !string.IsNullOrWhiteSpace(user.Nome))
                 {
                     _userName = user.Nome;
@@ -116,9 +115,9 @@
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // silencioso — sem logs ou mensagem
+            Logger.LogError(ex, "Erro ao carregar dados do utilizador autenticado.");
         }
     }
 

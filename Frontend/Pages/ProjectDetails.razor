@@ -1,61 +1,61 @@
 ﻿@page "/project/{ProjetoId:int}"
-@using Frontend.DTOs.Projetos
-@using Frontend.DTOs.Tarefas
+@using Frontend.DTOs.Project
+@using Frontend.DTOs.Task
 @using Frontend.Services
-@inject ProjetoService   ProjetoService
-@inject TarefaService    TarefaService
+@inject ProjectService ProjectService
+@inject TaskService TaskService
 @inject NavigationManager NavigationManager
-@inject ISnackbar        Snackbar
-@inject IDialogService   DialogService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @layout WorkspaceLayout
 
-<PageTitle>Detalhes do Projeto</PageTitle>
+<PageTitle>Project Details</PageTitle>
 
 <div class="page-container">
     <div class="glass-side"></div>
 
     <div style="flex:2;padding:2rem">
-        @if (_projeto is null)
+        @if (_project is null)
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
         }
         else
         {
-            <!-- ---------- Dados do projeto ---------- -->
+            <!-- ---------- Project Info ---------- -->
             <MudPaper Elevation="4" Class="pa-6 mb-6"
                       Style="background:rgba(255,255,255,.9);border-radius:16px;backdrop-filter:blur(8px)">
                 <MudStack Spacing="1">
-                    <MudText Typo="Typo.h4" Color="Color.Primary">@_projeto.Nome</MudText>
-                    <MudText Typo="Typo.subtitle2">@_projeto.NomeCliente</MudText>
+                    <MudText Typo="Typo.h4" Color="Color.Primary">@_project.Nome</MudText>
+                    <MudText Typo="Typo.subtitle2">@_project.NomeCliente</MudText>
 
-                    <MudDivider Class="my-2"/>
+                    <MudDivider Class="my-2" />
 
-                    <MudText Typo="Typo.body1">@_projeto.Descricao</MudText>
+                    <MudText Typo="Typo.body1">@_project.Descricao</MudText>
 
                     <MudStack Row Spacing="4" Class="mt-2">
-                        <MudText Typo="Typo.caption"><b>Preço/h:</b> @_projeto.PrecoHora?.ToString("C") ?? "N/D"</MudText>
-                        <MudText Typo="Typo.caption"><b>Criado em:</b> @_projeto.DataCriacao?.ToShortDateString() ?? "N/D"</MudText>
+                        <MudText Typo="Typo.caption"><b>Preço/h:</b> @_project.PrecoHora?.ToString("C") ?? "N/D"</MudText>
+                        <MudText Typo="Typo.caption"><b>Criado em:</b> @_project.DataCriacao?.ToShortDateString() ?? "N/D"</MudText>
                     </MudStack>
 
                     <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-3">
-                        <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteProjeto">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteProject">
                             Eliminar
                         </MudButton>
                     </MudStack>
                 </MudStack>
             </MudPaper>
 
-            <!-- ---------- Tarefas ---------- -->
+            <!-- ---------- Tasks ---------- -->
             <MudPaper Elevation="3" Class="pa-6"
                       Style="background:rgba(255,255,255,.95);border-radius:16px">
                 <MudStack Spacing="2">
                     <MudText Typo="Typo.h6" Color="Color.Primary">Tarefas Associadas</MudText>
 
-                    @if (_tarefas is null)
+                    @if (_tasks is null)
                     {
-                        <MudProgressCircular Color="Color.Primary" Indeterminate/>
+                        <MudProgressCircular Color="Color.Primary" Indeterminate />
                     }
-                    else if (!_tarefas.Any())
+                    else if (!_tasks.Any())
                     {
                         <MudAlert Severity="Severity.Info" Variant="Variant.Filled">
                             Não existem tarefas associadas.
@@ -64,7 +64,7 @@
                     else
                     {
                         <MudGrid GutterSize="2" RowSpacing="3">
-                            @foreach (var t in _tarefas)
+                            @foreach (var t in _tasks)
                             {
                                 <MudItem xs="12" sm="6" md="4">
                                     <MudPaper Class="pa-4" Elevation="2"
@@ -76,8 +76,8 @@
                                             <MudText Typo="Typo.caption"><b>Fim:</b> @(t.DataFim?.ToShortDateString() ?? "Em curso")</MudText>
 
                                             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                                                <MudMenuItem OnClick="() => TerminarTarefa(t.IdTarefa)">Terminar</MudMenuItem>
-                                                <MudMenuItem OnClick="() => RemoverTarefa(t.IdTarefa)">Remover</MudMenuItem>
+                                                <MudMenuItem OnClick="() => CompleteTask(t.IdTarefa)">Terminar</MudMenuItem>
+                                                <MudMenuItem OnClick="() => RemoveTask(t.IdTarefa)">Remover</MudMenuItem>
                                             </MudMenu>
                                         </MudStack>
                                     </MudPaper>
@@ -96,33 +96,31 @@
 @code {
     [Parameter] public int ProjetoId { get; set; }
 
-    private ProjetoDto?              _projeto;
-    private IEnumerable<TarefaDto>?  _tarefas;
+    private ProjectDetailsExtendedDto? _project;
+    private IEnumerable<TaskDetailsDto>? _tasks;
 
-    /* ---------- ciclo de vida ---------- */
     protected override async Task OnInitializedAsync()
     {
-        _projeto = await ProjetoService.GetAsync(ProjetoId);
-        _tarefas = await TarefaService.GetByProjetoIdAsync(ProjetoId);
+        _project = await ProjectService.GetByIdAsync(ProjetoId);
+        _tasks = await TaskService.GetByProjetoIdAsync(ProjetoId);
     }
 
-    private async Task RecarregarTarefas()
+    private async Task RefreshTasks()
     {
-        _tarefas = await TarefaService.GetByProjetoIdAsync(ProjetoId);
+        _tasks = await TaskService.GetByProjetoIdAsync(ProjetoId);
         StateHasChanged();
     }
 
-    /* ---------- ações ---------- */
-    private async Task DeleteProjeto()
+    private async Task DeleteProject()
     {
         var confirm = await DialogService.ShowMessageBox(
             "Eliminar",
             "Tem a certeza que deseja eliminar este projeto?",
             "Sim", "Cancelar");
 
-        if (confirm == true && _projeto is not null)
+        if (confirm == true && _project is not null)
         {
-            if (await ProjetoService.DeleteAsync(_projeto.IdProjeto))
+            if (await ProjectService.DeleteAsync(_project.IdProjeto))
             {
                 Snackbar.Add("Projeto eliminado com sucesso.", Severity.Success);
                 NavigationManager.NavigateTo("/projetos");
@@ -131,19 +129,19 @@
         }
     }
 
-    private async Task TerminarTarefa(int id)
+    private async Task CompleteTask(int id)
     {
-        await TarefaService.EndAsync(id, new EndTarefaDto(null));
+        await TaskService.UpdateAsync(id, new TaskUpdateDto() { Estado = "Finalizada" });
         Snackbar.Add("Tarefa marcada como concluída.", Severity.Success);
-        await RecarregarTarefas();
+        await RefreshTasks();
     }
 
-    private async Task RemoverTarefa(int id)
+    private async Task RemoveTask(int id)
     {
-        if (await TarefaService.DeleteAsync(id))
+        if (await TaskService.DeleteAsync(id))
         {
             Snackbar.Add("Tarefa removida com sucesso.", Severity.Info);
-            await RecarregarTarefas();
+            await RefreshTasks();
         }
         else Snackbar.Add("Erro ao remover tarefa.", Severity.Error);
     }

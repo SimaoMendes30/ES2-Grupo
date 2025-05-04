@@ -1,10 +1,13 @@
 ﻿@page "/login"
 @layout SubMainLayout
 
-@using Frontend.DTOs.Utilizadores
+@using Frontend.DTOs.User
 @using Frontend.Services
-@inject AuthService       AuthSvc
+@using Blazored.LocalStorage
+@inject UserService UserService
 @inject NavigationManager Navigation
+@inject Frontend.Services.AuthService AuthService
+
 
 <PageTitle>Iniciar Sessão</PageTitle>
 
@@ -12,7 +15,7 @@
     <MudPaper Elevation="10" Class="pa-8" Style="flex-grow:1;min-width:800px;max-width:90%;background-color:rgba(255,255,255,.8);backdrop-filter:blur(10px);">
         <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
 
-            <!-- ─────────── ESQUERDA ─────────── -->
+            <!-- ESQUERDA -->
             <MudItem xs="12" md="4">
                 <MudContainer>
                     <MudLink Href="/" Underline="Underline.None">
@@ -33,7 +36,7 @@
                 <MudDivider Vertical="true" />
             </MudItem>
 
-            <!-- ─────────── FORM ─────────── -->
+            <!-- FORMULÁRIO -->
             <MudItem xs="12" md="7">
                 <MudContainer>
                     <EditForm Model="_loginDto" OnValidSubmit="HandleLogin">
@@ -112,28 +115,31 @@
 </style>
 
 @code {
-    private readonly LoginDto _loginDto = new();
+    private UserLoginDto _loginDto = new();
     private string _errorMessage = string.Empty;
-    private bool   _isProcessing;
+    private bool _isProcessing = false;
 
     private bool HasError => !string.IsNullOrEmpty(_errorMessage);
 
     private async Task HandleLogin()
     {
         if (_isProcessing) return;
-        _isProcessing  = true;
-        _errorMessage  = string.Empty;
+
+        _isProcessing = true;
+        _errorMessage = string.Empty;
 
         try
         {
-            var ok = await AuthSvc.LoginAsync(_loginDto);  
-            if (ok)
+            var loginResult = await AuthService.LoginAsync(_loginDto);
+
+            if (loginResult)
             {
                 Navigation.NavigateTo("/dashboard", forceLoad: true);
-                return;
             }
-
-            _errorMessage = "Credenciais inválidas.";
+            else
+            {
+                _errorMessage = "Credenciais inválidas ou erro ao processar resposta.";
+            }
         }
         catch (Exception ex)
         {
@@ -143,5 +149,6 @@
         {
             _isProcessing = false;
         }
+
     }
 }

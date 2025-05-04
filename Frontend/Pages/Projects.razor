@@ -1,16 +1,15 @@
 ﻿@page "/projects"
-@using System.IdentityModel.Tokens.Jwt
+@using Frontend.DTOs.Project
+@using Frontend.Services
 @using Blazored.LocalStorage
 @using Frontend.Components.Projetos
-@using Frontend.DTOs.Projetos
-@using Frontend.Services
-@using MudBlazor
 @layout WorkspaceLayout
 
-@inject ProjetoService      ProjectService
+@inject ProjectService ProjectService
 @inject ILocalStorageService LocalStorage
-@inject IDialogService       DialogService
-@inject ISnackbar            Snackbar
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <PageTitle>Projetos</PageTitle>
 
@@ -40,10 +39,10 @@
                         </MudButton>
                     </ActivatorContent>
                     <ChildContent>
-                        <MudMenuItem @onclick='() => OrdenarPor("nome asc")'>Nome (A‑Z)</MudMenuItem>
-                        <MudMenuItem @onclick='() => OrdenarPor("nome desc")'>Nome (Z‑A)</MudMenuItem>
-                        <MudMenuItem @onclick='() => OrdenarPor("data asc")'>Data (Mais antiga)</MudMenuItem>
-                        <MudMenuItem @onclick='() => OrdenarPor("data desc")'>Data (Mais recente)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("nome asc")'>Nome (A-Z)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("nome desc")'>Nome (Z-A)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("data asc")'>Data (Mais antiga)</MudMenuItem>
+                        <MudMenuItem @onclick='() => OrdenarPor("data desc")'>Data (Mais recente)</MudMenuItem>
                     </ChildContent>
                 </MudMenu>
             </div>
@@ -58,15 +57,15 @@
 
                 <MudGrid GutterSize="3">
                     <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroNome"    Label="Nome do projeto" FullWidth/>
+                        <MudTextField @bind-Value="_filtroNome" Label="Nome do projeto" FullWidth/>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroCliente" Label="Cliente"         FullWidth/>
+                        <MudTextField @bind-Value="_filtroCliente" Label="Cliente" FullWidth/>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudStack Spacing="1">
                             <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data inicial" ShowToolbar="false"/>
-                            <MudDatePicker @bind-Date="_filtroDataFim"    Label="Data final"   ShowToolbar="false"/>
+                            <MudDatePicker @bind-Date="_filtroDataFim" Label="Data final" ShowToolbar="false"/>
                         </MudStack>
                     </MudItem>
                 </MudGrid>
@@ -79,11 +78,8 @@
         }
 
         <!-- ---------- LISTAGEM ---------- -->
-        <MudPaper Class="pa-4 mb-6"
-                  Elevation="1"
-                  Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
+        <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
             <MudGrid GutterSize="3">
-                <!-- Card “Novo projeto” -->
                 <MudItem xs="12" sm="6" md="3">
                     <MudCard Class="d-flex align-center justify-center cursor-pointer"
                              Style="height:100%;border:2px solid var(--mud-palette-primary);border-radius:12px"
@@ -95,23 +91,19 @@
                     </MudCard>
                 </MudItem>
 
-                @if (_projetosFiltrados.Count == 0)
+                @if (_projetos.Count == 0)
                 {
                     <MudItem xs="9">
-                        <MudCard Class="d-flex align-center justify-center"
-                                 Style="height:100%;background:#fafafa;border-radius:12px"
-                                 Elevation="0">
+                        <MudCard Class="d-flex align-center justify-center" Style="height:100%;background:#fafafa;border-radius:12px" Elevation="0">
                             <MudCardContent>
-                                <MudText Typo="Typo.subtitle1" Style="color:lightblue">
-                                    Não existem projetos
-                                </MudText>
+                                <MudText Typo="Typo.subtitle1" Style="color:lightblue">Não existem projetos</MudText>
                             </MudCardContent>
                         </MudCard>
                     </MudItem>
                 }
                 else
                 {
-                    @foreach (var p in _projetosFiltrados)
+                    @foreach (var p in _projetos)
                     {
                         <MudItem xs="12" sm="6" md="3">
                             <NavLink href="@($"/project/{p.IdProjeto}")" class="text-decoration-none d-block">
@@ -123,9 +115,7 @@
                                             </MudText>
                                             <MudSpacer/>
                                             <MudIcon Icon="@Icons.Material.Filled.Event"/>
-                                            <MudText Typo="Typo.caption">
-                                                @p.DataCriacao?.ToString("dd/MM/yyyy")
-                                            </MudText>
+                                            <MudText Typo="Typo.caption">@p.DataCriacao?.ToString("dd/MM/yyyy")</MudText>
                                         </div>
 
                                         <div class="d-flex align-center gap-1 mt-2">
@@ -147,101 +137,116 @@
                 }
             </MudGrid>
         </MudPaper>
+        <MudPaper Class="pa-4 mb-6 d-flex align-items-center justify-center" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
+            <MudPagination ShowPageButtons="true" 
+                           ShowFirstButton="true" 
+                           ShowLastButton="true" 
+                           Count="@_totalPaginas" 
+                           BoundaryCount="1"
+                           MiddleCount="2"
+                           Size="Size.Medium"
+                           Color="Color.Primary"
+                           SelectedChanged="async (page) => await MudarPagina(page)" />
+        </MudPaper>
     </div>
 </div>
 
 @code {
-    /* ---------- filtros ---------- */
-    private bool       mostrarFiltros;
-    private string     _filtroNome       = string.Empty;
-    private string     _filtroCliente    = string.Empty;
-    private DateTime?  _filtroDataInicio;
-    private DateTime?  _filtroDataFim;
+    private List<ProjectDetailsDto> _projetos = new();
+    private int _paginaAtual = 1;
+    private int _tamanhoPagina = 15;
+    private int _totalPaginas = 1;
 
-    /* ---------- dados ---------- */
-    private readonly List<ProjetoDto> _projetos          = new();
-    private List<ProjetoDto>          _projetosFiltrados = new();
+    private string? _ordenarPor = "dataCriacao";
+    private bool _descendente = true;
 
-    /* ---------- ciclo de vida ---------- */
-    protected override async Task OnInitializedAsync() => await CarregarDadosAsync();
+    private bool mostrarFiltros = false;
+    private string? _filtroNome;
+    private string? _filtroCliente;
+    private DateTime? _filtroDataInicio;
+    private DateTime? _filtroDataFim;
 
-    private async Task CarregarDadosAsync()
+    private int? _userId;
+
+    protected override async Task OnInitializedAsync()
     {
-        try
+        _userId = await LocalStorage.GetItemAsync<int?>("user_id");
+
+        if (!_userId.HasValue)
         {
-            var token = await LocalStorage.GetItemAsync<string>("auth_token");
-            if (string.IsNullOrWhiteSpace(token)) return;
-
-            var idClaim = new JwtSecurityTokenHandler()
-                          .ReadJwtToken(token)
-                          .Claims.FirstOrDefault(c => c.Type == "nameid");
-
-            if (idClaim is not null && int.TryParse(idClaim.Value, out var userId))
-            {
-                _projetos.Clear();
-                _projetos.AddRange(await ProjectService.ListByUserAsync(userId) ?? Enumerable.Empty<ProjetoDto>());
-                AplicarFiltros();
-            }
+            Snackbar.Add("Utilizador não autenticado.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+            return;
         }
-        catch
+
+        await CarregarProjetosAsync();
+    }
+
+    private async Task CarregarProjetosAsync()
+    {
+        var filtros = new ProjectFilterDto
         {
-            Snackbar.Add("Erro ao carregar projetos.", Severity.Error);
-        }
-    }
-
-    /* ---------- filtros e ordenação ---------- */
-    private string _ordenacaoAtual = "nome asc";
-
-    private void AplicarFiltros()
-    {
-        _projetosFiltrados = _projetos.Where(p =>
-            (string.IsNullOrWhiteSpace(_filtroNome) ||
-                p.Nome?.Contains(_filtroNome, StringComparison.OrdinalIgnoreCase) == true) &&
-            (string.IsNullOrWhiteSpace(_filtroCliente) ||
-                p.NomeCliente?.Contains(_filtroCliente, StringComparison.OrdinalIgnoreCase) == true) &&
-            (!_filtroDataInicio.HasValue ||
-                (p.DataCriacao.HasValue && p.DataCriacao.Value >= _filtroDataInicio.Value)) &&
-            (!_filtroDataFim.HasValue ||
-                (p.DataCriacao.HasValue && p.DataCriacao.Value <= _filtroDataFim.Value))
-        ).ToList();
-
-        OrdenarPor(_ordenacaoAtual);
-        mostrarFiltros = false;
-    }
-
-    private void LimparFiltros()
-    {
-        _filtroNome        = string.Empty;
-        _filtroCliente     = string.Empty;
-        _filtroDataInicio  = null;
-        _filtroDataFim     = null;
-        AplicarFiltros();
-    }
-
-    private void OrdenarPor(string criterio)
-    {
-        _ordenacaoAtual    = criterio;
-        _projetosFiltrados = criterio switch
-        {
-            "nome asc"  => _projetosFiltrados.OrderBy(p => p.Nome).ToList(),
-            "nome desc" => _projetosFiltrados.OrderByDescending(p => p.Nome).ToList(),
-            "data asc"  => _projetosFiltrados.OrderBy(p => p.DataCriacao).ToList(),
-            "data desc" => _projetosFiltrados.OrderByDescending(p => p.DataCriacao).ToList(),
-            _           => _projetosFiltrados
+            Nome = _filtroNome,
+            NomeCliente = _filtroCliente,
+            DataCriacaoDe = _filtroDataInicio,
+            DataCriacaoAte = _filtroDataFim
         };
+
+        var resultado = await ProjectService.GetByUserPagedAsync(
+            userId: _userId.Value,
+            page: _paginaAtual,
+            pageSize: _tamanhoPagina,
+            orderBy: _ordenarPor,
+            descending: _descendente,
+            filtros: filtros
+        );
+
+        _projetos = resultado.Items.ToList();
+        Console.WriteLine(resultado.TotalCount);
+        _totalPaginas = (int)Math.Ceiling((double)resultado.TotalCount / _tamanhoPagina);
+        Console.WriteLine(_totalPaginas);
     }
 
-    /* ---------- criar novo ---------- */
-    private async Task CriarNovoProjeto()
+    private async Task MudarPagina(int novaPagina)
     {
-        var dialog = await DialogService.ShowAsync<CreateProjectDialog>(
-            "Criar Projeto",
-            new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true });
+        _paginaAtual = novaPagina;
+        await CarregarProjetosAsync();
+    }
 
-        if (!(await dialog.Result).Canceled)
+    private async Task AplicarFiltros()
+    {
+        _paginaAtual = 1;
+        await CarregarProjetosAsync();
+    }
+
+    private async Task LimparFiltros()
+    {
+        _filtroNome = null;
+        _filtroCliente = null;
+        _filtroDataInicio = null;
+        _filtroDataFim = null;
+        _paginaAtual = 1;
+        await CarregarProjetosAsync();
+    }
+
+    private async Task OrdenarPor(string criterio)
+    {
+        _paginaAtual = 1;
+
+        (_ordenarPor, _descendente) = criterio switch
         {
-            Snackbar.Add("Projeto criado com sucesso!", Severity.Success);
-            await CarregarDadosAsync();
-        }
+            "nome asc" => ("nome", false),
+            "nome desc" => ("nome", true),
+            "data asc" => ("dataCriacao", false),
+            "data desc" => ("dataCriacao", true),
+            _ => (_ordenarPor, _descendente)
+        };
+
+        await CarregarProjetosAsync();
+    }
+
+    private void CriarNovoProjeto()
+    {
+        NavigationManager.NavigateTo("/project/create");
     }
 }

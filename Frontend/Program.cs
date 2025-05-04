@@ -16,34 +16,33 @@ internal class Program
         builder.RootComponents.Add<App>("#app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Blazored.LocalStorage
+        // Blazored.LocalStorage
         builder.Services.AddBlazoredLocalStorage();
 
-// JWT handler
+        // JWT handler
         builder.Services.AddScoped<AuthHeaderHandler>();
 
-// HttpClient “Backend”
+        // HttpClient “Backend”
         builder.Services
             .AddHttpClient("Backend", client =>
             {
-                client.BaseAddress = new Uri("http://localhost:5000/"); // URL da sua API
+                client.BaseAddress = new Uri("http://localhost:5000/"); // URL da tua API
             })
             .AddHttpMessageHandler<AuthHeaderHandler>();
 
-// HttpClient padrão = “Backend”
+        // HttpClient padrão = “Backend”
         builder.Services.AddScoped(sp =>
             sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("Backend"));
 
-// Registo de Services
-        builder.Services.AddScoped<ApiService>();
+        // Registo de serviços concretos
         builder.Services.AddScoped<AuthService>();
-        builder.Services.AddScoped<UtilizadorService>();
-        builder.Services.AddScoped<ProjetoService>();
-        builder.Services.AddScoped<TarefaService>();
-        builder.Services.AddScoped<MembroService>();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<ProjectService>();
+        builder.Services.AddScoped<TaskService>();
+        builder.Services.AddScoped<MemberService>();
 
-// MudBlazor
+        // MudBlazor
         builder.Services.AddMudServices(config =>
         {
             config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;

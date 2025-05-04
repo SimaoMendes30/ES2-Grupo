@@ -1,16 +1,16 @@
 ﻿@page "/dashboard"
 @using System.IdentityModel.Tokens.Jwt
 @using Blazored.LocalStorage
-@using Frontend.Services
-@using Frontend.DTOs.Projetos
-@using Frontend.DTOs.Tarefas
-@using Components.Projetos
+@using Frontend.Components.Projetos
 @using Frontend.Components.Tarefa
+@using Frontend.Services
+@using Frontend.DTOs.Project
+@using Frontend.DTOs.Task
 @layout WorkspaceLayout
 
 @inject ILocalStorageService LocalStorage
-@inject ProjetoService ProjectService
-@inject TarefaService TaskService
+@inject ProjectService ProjectService
+@inject TaskService TaskService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
@@ -98,9 +98,6 @@
                                             <MudIcon Icon="@Icons.Material.Filled.Description"/>
                                             <MudText Typo="Typo.caption">@((projeto.Descricao?.Length > 30) ? projeto.Descricao.Substring(0, 30) + "..." : projeto.Descricao)</MudText>
                                         </div>
-
-
-
                                     </MudCardContent>
                                 </MudCard>
                             </NavLink>
@@ -175,8 +172,8 @@
 </div>
 
 @code {
-    private List<ProjetoDto> _ultimosProjetos = new();
-    private List<TarefaDto> _ultimasTarefas = new();
+    private List<ProjectDetailsDto> _ultimosProjetos = new();
+    private List<TaskDetailsDto> _ultimasTarefas = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -185,45 +182,39 @@
 
     private async Task CarregarDadosAsync()
     {
-        try
+        var userId = await LocalStorage.GetItemAsync<int?>("user_id");
+        if (!userId.HasValue)
         {
-            var token = await LocalStorage.GetItemAsync<string>("auth_token");
-            if (string.IsNullOrEmpty(token)) return;
-
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-            var idClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
-
-            if (idClaim != null && int.TryParse(idClaim.Value, out var userId))
-            {
-                var todosProjetos = await ProjectService.ListByUserAsync(userId);
-                _ultimosProjetos = todosProjetos.OrderByDescending(p => p.IdProjeto).Take(3).ToList();
-
-                var todasTarefas = await TaskService.ListByUserAsync(userId);
-                _ultimasTarefas = todasTarefas.OrderByDescending(t => t.IdTarefa).Take(3).ToList();
-            }
+            Snackbar.Add("Utilizador não autenticado.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+            return;
         }
-        catch
-        {
-            // silencioso
-        }
+
+        // Carregar Projetos
+        var pagedProjetos = await ProjectService.GetByUserPagedAsync(
+            userId.Value, page: 1, pageSize: 3, orderBy: "dataCriacao", descending: true);
+        _ultimosProjetos = pagedProjetos.Items.ToList();
+
+        // Carregar Tarefas
+        var pagedTarefas = await TaskService.GetByUserPagedAsync(
+            userId.Value, page: 1, pageSize: 3, orderBy: "dataInicio", descending: true);
+        _ultimasTarefas = pagedTarefas.Items.ToList();
     }
 
     private async Task CriarNovoProjeto()
     {
         var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
-
         var dialogReference = await DialogService.ShowAsync<CreateProjectDialog>("Criar Projeto", options);
-
         var result = await dialogReference.Result;
 
-        if (!result.Canceled && result.Data is ProjetoCreateDto projetoCriado)
+        if (!result.Canceled)
         {
             Snackbar.Add("Projeto criado com sucesso!", Severity.Success);
             await CarregarDadosAsync();
             StateHasChanged();
         }
     }
-    
+
     private async Task CriarNovaTarefa()
     {
         var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
