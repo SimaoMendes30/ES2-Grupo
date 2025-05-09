@@ -85,7 +85,7 @@
                                             <MudSpacer/>
                                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                                 <MudIcon Icon="@Icons.Material.Filled.Event"/>
-                                                <MudText Typo="Typo.caption">@projeto.DataCriacao?.ToShortDateString()</MudText>
+                                                <MudText Typo="Typo.caption">@projeto.DataCriacao?.UtcDateTime.ToString("dd/MM/yyyy")</MudText>
                                             </div>
                                         </div>
 

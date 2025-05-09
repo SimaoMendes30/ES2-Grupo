@@ -34,7 +34,9 @@
 
                     <MudStack Row Spacing="4" Class="mt-2">
                         <MudText Typo="Typo.caption"><b>Preço/h:</b> @_project.PrecoHora?.ToString("C") ?? "N/D"</MudText>
-                        <MudText Typo="Typo.caption"><b>Criado em:</b> @_project.DataCriacao?.ToShortDateString() ?? "N/D"</MudText>
+                        <MudText Typo="Typo.caption">
+                            <b>Criado em:</b> @_project.DataCriacao?.UtcDateTime.ToString("dd/MM/yyyy") ?? "N/D"
+                        </MudText>
                     </MudStack>
 
                     <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-3">

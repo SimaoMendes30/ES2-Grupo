@@ -1,0 +1,83 @@
+﻿@using Frontend.DTOs.Task
+@using Frontend.Services
+<h3>TaskOperations</h3>
+
+<div class="d-flex flex-wrap">
+    @foreach (var t in Tarefas)
+    {
+        <MudCard Class="pa-3 m-2" Style="height:100%;border-radius:12px" Elevation="2">
+            <MudCardContent>
+                <div class="d-flex align-center">
+                    <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+                        @(t.Titulo?.Length > 18 ? t.Titulo[..18] + "..." : t.Titulo)
+                    </MudText>
+                    <MudSpacer/>
+                    <MudIcon Icon="@Icons.Material.Filled.Event"/>
+                    <MudText Typo="Typo.caption">@t.DataInicio.ToString("dd/MM/yyyy")</MudText>
+                </div>
+
+                <div class="d-flex align-center gap-1 mt-2">
+                    <MudIcon Icon="@Icons.Material.Filled.Person"/>
+                    <MudText Typo="Typo.caption">@t.Responsavel</MudText>
+                </div>
+
+                <div class="d-flex align-center gap-1 mt-1">
+                    <MudIcon Icon="@Icons.Material.Filled.Description"/>
+                    <MudText Typo="Typo.caption">
+                        @(t.Descricao?.Length > 30 ? t.Descricao[..30] + "..." : t.Descricao)
+                    </MudText>
+                </div>
+
+                <MudDivider Class="my-2" />
+                <div class="d-flex justify-end">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="() => UpdateTask(t.IdTarefa)">
+                        Finalizar
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="() => DeleteTask(t.IdTarefa)">
+                        Eliminar
+                    </MudButton>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<TaskDetailsDto> Tarefas { get; set; } = new();
+
+    [Inject]
+    private TaskService TaskService { get; set; } = null!;
+
+    [Inject]
+    private ISnackbar Snackbar { get; set; } = null!;
+
+    private async Task DeleteTask(int id)
+    {
+        try
+        {
+            await TaskService.DeleteAsync(id);
+            Tarefas.RemoveAll(t => t.IdTarefa == id);
+            Snackbar.Add("Tarefa eliminada com sucesso.", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao eliminar tarefa: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task UpdateTask(int id)
+    {
+        try
+        {
+            await TaskService.UpdateAsync(id, new TaskUpdateDto { Estado = "Finalizada" });
+            var tarefa = Tarefas.FirstOrDefault(t => t.IdTarefa == id);
+            if (tarefa != null) tarefa.Estado = "Finalizada";
+            Snackbar.Add("Tarefa atualizada para Finalizada.", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao atualizar tarefa: {ex.Message}", Severity.Error);
+        }
+    }
+}

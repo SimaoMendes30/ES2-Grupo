@@ -1,0 +1,86 @@
+﻿@page "/project/{ProjetoId:int}/invite"
+@using Frontend.DTOs.Member
+@using Frontend.DTOs.User
+@using Frontend.Services
+@inject MemberService MemberService
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@layout WorkspaceLayout
+
+<PageTitle>Convidar Membro</PageTitle>
+
+<div class="page-container">
+    <div class="glass-side"></div>
+
+    <div style="flex:2;padding:2rem">
+        @if (_users is null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
+        }
+        else
+        {
+            <MudPaper Elevation="4" Class="pa-6 mb-6"
+                      Style="background:rgba(255,255,255,.9);border-radius:16px;backdrop-filter:blur(8px); width: 100%">
+                <MudForm @ref="_form" Validated="HandleValidSubmit">
+                    <MudSelect Label="Selecionar Utilizador" @bind-Value="_selectedUserId" Required="true" FullWidth="true">
+                        @foreach (var user in _users)
+                        {
+                            <MudSelectItem Value="@user.IdUtilizador">@user.Nome</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-3">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="HandleValidSubmit">
+                            Convidar Membro
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo($"/project/{ProjetoId}"))">
+                            Cancelar
+                        </MudButton>
+                    </MudStack>
+                </MudForm>
+            </MudPaper>
+        }
+    </div>
+
+    <div class="glass-side"></div>
+</div>
+
+@code {
+    [Parameter] public int ProjetoId { get; set; }
+
+    private IEnumerable<UserDetailsDto>? _users; // Alterado para IEnumerable
+    private int? _selectedUserId;
+    private MudForm? _form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = await UserService.GetAllAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (_selectedUserId.HasValue)
+            {
+                var member = new MemberCreateDto
+                {
+                    IdUtilizador = _selectedUserId.Value,
+                    IdProjeto = ProjetoId,
+                    EstadoConvite = "Pendente",
+                    DataConvite = DateTime.UtcNow
+                };
+
+                await MemberService.CreateAsync(member);
+
+                Snackbar.Add("Membro convidado com sucesso.", Severity.Success);
+                NavigationManager.NavigateTo($"/project/{ProjetoId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao convidar membro: {ex.Message}", Severity.Error);
+        }
+    }
+}

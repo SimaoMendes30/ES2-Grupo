@@ -21,6 +21,6 @@ namespace Frontend.DTOs.Project
         
         [Required]
         [DataType(DataType.Date)]
-        public DateTime DataCriacao { get; set; }
+        public DateTimeOffset DataCriacao { get; set; }
     }
 }

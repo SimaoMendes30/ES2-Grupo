@@ -1,0 +1,79 @@
+﻿@page "/project/edit/{ProjetoId:int}"
+@using Frontend.DTOs.Project
+@using Frontend.Services
+@inject ProjectService ProjectService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@layout WorkspaceLayout
+
+<PageTitle>Editar Projeto</PageTitle>
+
+<div class="page-container">
+    <div class="glass-side"></div>
+
+    <div style="flex:2;padding:2rem">F
+        @if (_project is null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
+        }
+        else
+        {
+            <MudPaper Elevation="4" Class="pa-6 mb-6"
+                      Style="background:rgba(255,255,255,.9);border-radius:16px;backdrop-filter:blur(8px); width: 100%">
+                <MudForm @ref="_form" Validated="HandleValidSubmit">
+                    <MudTextField Label="Nome do Projeto" @bind-Value="_project.Nome" Required="true" FullWidth="true" />
+                    <MudTextField Label="Nome do Cliente" @bind-Value="_project.NomeCliente" Required="true" FullWidth="true" />
+                    <MudTextField Label="Descrição" @bind-Value="_project.Descricao" Required="true" FullWidth="true" />
+                    <MudTextField Label="Preço por Hora" @bind-Value="_project.PrecoHora" Required="true" Type="number" FullWidth="true" />
+
+                    <MudStack Row Spacing="2" Justify="Justify.FlexEnd" Class="mt-3">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="HandleValidSubmit">
+                            Guardar Alterações
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo($"/project/{ProjetoId}"))">
+                            Cancelar
+                        </MudButton>
+                    </MudStack>
+                </MudForm>
+            </MudPaper>
+        }
+    </div>
+
+    <div class="glass-side"></div>
+</div>
+
+@code {
+    [Parameter] public int ProjetoId { get; set; }
+
+    private ProjectDetailsExtendedDto? _project;
+    private MudForm? _form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _project = await ProjectService.GetByIdAsync(ProjetoId);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (_project is not null)
+            {
+                await ProjectService.UpdateAsync(_project.IdProjeto, new ProjectUpdateDto
+                {
+                    Nome = _project.Nome,
+                    NomeCliente = _project.NomeCliente,
+                    Descricao = _project.Descricao,
+                    PrecoHora = _project.PrecoHora
+                });
+
+                Snackbar.Add("Projeto atualizado com sucesso.", Severity.Success);
+                NavigationManager.NavigateTo($"/project/{ProjetoId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao atualizar o projeto: {ex.Message}", Severity.Error);
+        }
+    }
+}

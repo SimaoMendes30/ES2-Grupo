@@ -56,13 +56,28 @@
 @code {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [Inject] private ProjectService ProjetoService { get; set; } = default!;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
     private ProjectCreateDto Projeto { get; set; } = new();
     private EditContext editContext = default!;
-
-    protected override void OnInitialized()
+    
+    protected override async Task OnInitializedAsync()
     {
         editContext = new EditContext(Projeto);
+
+        // 🔍 Buscar o ID do utilizador ao LocalStorage
+        var userId = await JS.InvokeAsync<string>("localStorage.getItem", "user_id");
+
+        if (!string.IsNullOrEmpty(userId) && int.TryParse(userId, out int idParsed))
+        {
+            Projeto.Responsavel = idParsed;
+        }
+        else
+        {
+            Snackbar.Add("Utilizador não autenticado.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+        }
     }
 
     private async Task Submit()
@@ -71,7 +86,9 @@
         {
             try
             {
+                // 📝 Submeter o Projeto com o ID do Utilizador associado
                 var criado = await ProjetoService.CreateAsync(Projeto);
+                Snackbar.Add("Projeto criado com sucesso.", Severity.Success);
                 MudDialog.Close(DialogResult.Ok(criado));
             }
             catch (Exception ex)

@@ -4,6 +4,7 @@
 @using Frontend.Components.Tarefa
 @using Frontend.DTOs.Task
 @using Frontend.Services
+@using Frontend.Pages
 @layout WorkspaceLayout
 
 @inject TaskService TaskService
@@ -48,106 +49,17 @@
             </div>
         </MudPaper>
 
-        <!-- Painel de Filtros -->
-        @if (mostrarFiltros)
-        {
-            <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:#fff;border-radius:12px">
-                <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-2">Filtros</MudText>
-                <MudDivider Class="mb-4"/>
-
-                <MudGrid GutterSize="3">
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudTextField @bind-Value="_filtroTitulo" Label="Título da Tarefa" FullWidth/>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudSelect T="string?" @bind-Value="_filtroResponsavel" Label="Selecionar Responsabilidade" FullWidth>
-                            <MudSelectItem Value="_states[0]">As minhas Tarefas</MudSelectItem>
-                            <MudSelectItem Value="_states[1]">As Tarefas associadas</MudSelectItem>
-                            <MudSelectItem Value="_states[2]">Todas as Tarefas</MudSelectItem>
-                        </MudSelect>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudStack Spacing="1">
-                            <MudDatePicker @bind-Date="_filtroDataInicio" Label="Data Início" ShowToolbar="false"/>
-                            <MudDatePicker @bind-Date="_filtroDataFim" Label="Data Fim" ShowToolbar="false"/>
-                        </MudStack>
-                    </MudItem>
-                </MudGrid>
-
-                <div class="d-flex justify-end mt-4" style="gap:1rem">
-                    <MudButton Variant="Variant.Outlined" OnClick="LimparFiltros">Limpar</MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AplicarFiltros">Aplicar</MudButton>
-                </div>
-            </MudPaper>
-        }
-
         <!-- Listagem de Tarefas -->
         <MudPaper Class="pa-4 mb-6" Elevation="1" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
-            <MudGrid GutterSize="3">
-                <MudItem xs="12" sm="6" md="3">
-                    <MudCard Class="d-flex align-center justify-center cursor-pointer"
-                             Style="height:100%;border:2px solid var(--mud-palette-primary);border-radius:12px"
-                             Elevation="1"
-                             @onclick="CriarNovaTarefa">
-                        <MudCardContent Class="d-flex align-center justify-center w-100 h-100 p-0">
-                            <MudIcon Icon="@Icons.Material.Filled.Add" Size="Size.Large" Color="Color.Primary"/>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-
-                @if (_tarefas.Count == 0)
-                {
-                    <MudItem xs="9">
-                        <MudCard Class="d-flex align-center justify-center" Style="height:100%;background:#fafafa;border-radius:12px" Elevation="0">
-                            <MudCardContent>
-                                <MudText Typo="Typo.subtitle1" Style="color:lightblue">Não existem tarefas</MudText>
-                            </MudCardContent>
-                        </MudCard>
-                    </MudItem>
-                }
-                else
-                {
-                    @foreach (var t in _tarefas)
-                    {
-                        <MudItem xs="12" sm="6" md="3">
-                            <NavLink href="@($"/task/{t.IdTarefa}")" class="text-decoration-none d-block">
-                                <MudCard Class="pa-3" Style="height:100%;border-radius:12px" Elevation="2">
-                                    <MudCardContent>
-                                        <div class="d-flex align-center">
-                                            <MudText Typo="Typo.subtitle1" Color="Color.Primary">
-                                                @(t.Titulo?.Length > 18 ? t.Titulo[..18] + "..." : t.Titulo)
-                                            </MudText>
-                                            <MudSpacer/>
-                                            <MudIcon Icon="@Icons.Material.Filled.Event"/>
-                                            <MudText Typo="Typo.caption">@t.DataInicio.ToString("dd/MM/yyyy")</MudText>
-                                        </div>
-
-                                        <div class="d-flex align-center gap-1 mt-2">
-                                            <MudIcon Icon="@Icons.Material.Filled.Person"/>
-                                            <MudText Typo="Typo.caption">@t.Responsavel</MudText>
-                                        </div>
-
-                                        <div class="d-flex align-center gap-1 mt-1">
-                                            <MudIcon Icon="@Icons.Material.Filled.Description"/>
-                                            <MudText Typo="Typo.caption">
-                                                @(t.Descricao?.Length > 30 ? t.Descricao[..30] + "..." : t.Descricao)
-                                            </MudText>
-                                        </div>
-                                    </MudCardContent>
-                                </MudCard>
-                            </NavLink>
-                        </MudItem>
-                    }
-                }
-            </MudGrid>
+            <TaskOperations Tarefas="@_tarefas" />
         </MudPaper>
 
         <!-- Paginação -->
         <MudPaper Class="pa-4 mb-6 d-flex align-items-center justify-center" Style="background:rgba(255,255,255,.5);border-radius:12px;backdrop-filter:blur(10px)">
-            <MudPagination ShowPageButtons="true" 
-                           ShowFirstButton="true" 
-                           ShowLastButton="true" 
-                           Count="@_totalCount" 
+            <MudPagination ShowPageButtons="true"
+                           ShowFirstButton="true"
+                           ShowLastButton="true"
+                           Count="@_totalCount"
                            BoundaryCount="1"
                            MiddleCount="2"
                            Size="Size.Medium"

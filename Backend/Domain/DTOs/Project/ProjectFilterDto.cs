@@ -8,7 +8,7 @@
     public decimal? PrecoHoraMax { get; set; }
     public int? Responsavel { get; set; }
     public List<int>? IdsResponsaveis { get; set; }
-    public DateTime? DataCriacaoDe { get; set; }
-    public DateTime? DataCriacaoAte { get; set; }
+    public DateTimeOffset? DataCriacaoDe { get; set; }
+    public DateTimeOffset? DataCriacaoAte { get; set; }
     public bool? IsDeleted { get; set; }
 }

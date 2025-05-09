@@ -18,6 +18,6 @@ namespace Frontend.DTOs.Project
         public int? Responsavel { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? DataCriacao { get; set; }
+        public DateTimeOffset? DataCriacao { get; set; }
     }
 }

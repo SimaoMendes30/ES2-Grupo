@@ -67,8 +67,8 @@ public class ProjectController : ControllerBase
         [FromQuery] bool descending = false,
         [FromQuery] string? nome = null,
         [FromQuery] string? nomeCliente = null,
-        [FromQuery] DateTime? dataCriacaoDe = null,
-        [FromQuery] DateTime? dataCriacaoAte = null,
+        [FromQuery] DateTimeOffset? dataCriacaoDe = null,
+        [FromQuery] DateTimeOffset? dataCriacaoAte = null,
         [FromQuery] decimal? precoHoraMin = null,
         [FromQuery] decimal? precoHoraMax = null,
         [FromQuery] bool? isDeleted = false)

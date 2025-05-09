@@ -14,7 +14,7 @@
 
         public int Responsavel { get; set; }
 
-        public DateTime DataCriacao { get; set; }
+        public DateTimeOffset DataCriacao { get; set; }
 
         public bool IsDeleted { get; set; }
     }
