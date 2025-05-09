@@ -14,9 +14,15 @@
     <div class="glass-side"></div>
 
     <div style="flex:2;padding:2rem">
-        @if (_users is null)
+        @if (loading)
         {
             <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
+        }
+        else if (_users is null || !_users.Any())
+        {
+            <MudAlert Severity="Info" Variant="Filled">
+                Não existem utilizadores disponíveis para convidar.
+            </MudAlert>
         }
         else
         {
@@ -49,13 +55,31 @@
 @code {
     [Parameter] public int ProjetoId { get; set; }
 
-    private IEnumerable<UserDetailsDto>? _users; // Alterado para IEnumerable
+    private IEnumerable<UserDetailsDto>? _users; // Mudado para IEnumerable
     private int? _selectedUserId;
     private MudForm? _form;
+    private bool loading = true; // Estado de carregamento
 
     protected override async Task OnInitializedAsync()
     {
-        _users = await UserService.GetAllAsync();
+        try
+        {
+            loading = true;
+            _users = await UserService.GetAllAsync();
+
+            if (_users is null || !_users.Any())
+            {
+                Snackbar.Add("Não existem utilizadores disponíveis para convidar.", Severity.Info);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao obter a lista de utilizadores: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 
     private async Task HandleValidSubmit()
@@ -76,6 +100,10 @@
 
                 Snackbar.Add("Membro convidado com sucesso.", Severity.Success);
                 NavigationManager.NavigateTo($"/project/{ProjetoId}");
+            }
+            else
+            {
+                Snackbar.Add("Por favor, selecione um utilizador.", Severity.Warning);
             }
         }
         catch (Exception ex)

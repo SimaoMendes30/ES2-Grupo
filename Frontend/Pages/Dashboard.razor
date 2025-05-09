@@ -197,7 +197,7 @@
 
         // Carregar Tarefas
         var pagedTarefas = await TaskService.GetByUserPagedAsync(
-            userId.Value, page: 1, pageSize: 3, orderBy: "dataInicio", descending: true);
+            userId.Value, page: 1, pageSize: 300000, orderBy: "dataInicio", descending: true);
         _ultimasTarefas = pagedTarefas.Items.ToList();
     }
 

@@ -10,9 +10,9 @@
 
         public int Responsavel { get; set; }
 
-        public DateTime DataInicio { get; set; }
+        public DateTimeOffset DataInicio { get; set; }
 
-        public DateTime? DataFim { get; set; }
+        public DateTimeOffset? DataFim { get; set; }
 
         public string Estado { get; set; } = null!;
 

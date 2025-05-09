@@ -7,8 +7,8 @@ public static class TaskFactory
     public static TaskEntity Create(
         int responsavelId,
         string titulo,
-        DateTime? dataInicio,
-        DateTime? dataFim,
+        DateTimeOffset? dataInicio,
+        DateTimeOffset? dataFim,
         string estado = "Em curso",
         decimal? precoHora = null,
         bool isDeleted = false)
@@ -17,7 +17,7 @@ public static class TaskFactory
         {
             Responsavel     = responsavelId,
             Titulo          = titulo,
-            DataInicio      = dataInicio ?? DateTime.UtcNow,
+            DataInicio      = dataInicio ?? DateTimeOffset.UtcNow,
             DataFim         = dataFim,
             Estado          = string.IsNullOrWhiteSpace(estado) ? "Em curso" : estado,
             PrecoHora       = precoHora,

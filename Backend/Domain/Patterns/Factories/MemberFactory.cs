@@ -9,8 +9,8 @@ public static class MemberFactory
         int idUtilizador,
         string estadoConvite = "Pendente",
         string estadoAtividade = "Ativo",
-        DateTime? dataConvite = null,
-        DateTime? dataEstado = null)
+        DateTimeOffset? dataConvite = null,
+        DateTimeOffset? dataEstado = null)
     {
         return new MemberEntity
         {
@@ -18,8 +18,8 @@ public static class MemberFactory
             IdUtilizador = idUtilizador,
             EstadoConvite = string.IsNullOrWhiteSpace(estadoConvite) ? "Pendente" : estadoConvite,
             EstadoAtividade = string.IsNullOrWhiteSpace(estadoAtividade) ? "Ativo" : estadoAtividade,
-            DataConvite = dataConvite ?? DateTime.UtcNow,
-            DataEstado = dataEstado ?? DateTime.UtcNow
+            DataConvite = dataConvite ?? DateTimeOffset.UtcNow,
+            DataEstado = dataEstado ?? DateTimeOffset.UtcNow
         };
     }
 }

@@ -11,9 +11,9 @@ public partial class MemberEntity
 
     public int IdProjeto { get; set; }
 
-    public DateTime DataConvite { get; set; }
+    public DateTimeOffset DataConvite { get; set; }
 
-    public DateTime? DataEstado { get; set; }
+    public DateTimeOffset? DataEstado { get; set; }
 
     public string EstadoConvite { get; set; } = null!;
 

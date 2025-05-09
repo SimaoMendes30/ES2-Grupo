@@ -18,9 +18,9 @@ namespace Frontend.DTOs.Member
         public string? EstadoAtividade { get; set; } = "Ativo";
         
         [DataType(DataType.DateTime)]
-        public DateTime? DataConvite { get; set; }
+        public DateTimeOffset? DataConvite { get; set; }
         
         [DataType(DataType.DateTime)]
-        public DateTime? DataEstado { get; set; }
+        public DateTimeOffset? DataEstado { get; set; }
     }
 }

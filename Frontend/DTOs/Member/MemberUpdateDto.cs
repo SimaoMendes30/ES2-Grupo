@@ -13,6 +13,6 @@ namespace Frontend.DTOs.Member
         public string? EstadoAtividade { get; set; } = null!;
         
         [DataType(DataType.DateTime)]
-        public DateTime? DataEstado { get; set; }
+        public DateTimeOffset? DataEstado { get; set; }
     }
 }

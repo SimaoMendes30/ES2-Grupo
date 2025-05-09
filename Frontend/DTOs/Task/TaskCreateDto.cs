@@ -15,10 +15,10 @@ namespace Frontend.DTOs.Task
 
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime DataInicio { get; set; }
+        public DateTimeOffset DataInicio { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? DataFim { get; set; }
+        public DateTimeOffset? DataFim { get; set; }
 
         [Required]
         [StringLength(256)]

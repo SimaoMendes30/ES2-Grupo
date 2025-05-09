@@ -12,10 +12,10 @@ namespace Frontend.DTOs.Task
         public int? Responsavel { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? DataInicio { get; set; }
+        public DateTimeOffset? DataInicio { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? DataFim { get; set; }
+        public DateTimeOffset? DataFim { get; set; }
 
         [StringLength(256)]
         public string? Estado { get; set; }
