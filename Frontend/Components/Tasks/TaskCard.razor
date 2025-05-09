@@ -1,0 +1,17 @@
+﻿@using Frontend.DTOs.Task
+<MudPaper Class="pa-4" Elevation="2" Style="background:rgba(255,255,255,.9);border-radius:12px">
+    <MudStack Spacing="1">
+        <MudText Typo="Typo.subtitle1" Color="Color.Primary">@Task.Titulo</MudText>
+        <MudText Typo="Typo.caption"><b>Estado:</b> @Task.Estado</MudText>
+        <MudText Typo="Typo.caption"><b>Início:</b> @Task.DataInicio.UtcDateTime.ToString("dd/MM/yyyy")</MudText>
+        <MudText Typo="Typo.caption"><b>Fim:</b> @(Task.DataFim?.UtcDateTime.ToString("dd/MM/yyyy") ?? "Em curso")</MudText>
+
+        <TaskOperations TaskId="@Task.IdTarefa" OnComplete="OnTaskCompleted" OnRemove="OnTaskRemoved" />
+    </MudStack>
+</MudPaper>
+
+@code {
+    [Parameter] public TaskDetailsDto Task { get; set; }
+    [Parameter] public EventCallback<int> OnTaskCompleted { get; set; }
+    [Parameter] public EventCallback<int> OnTaskRemoved { get; set; }
+}

@@ -31,12 +31,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Projetos/CreateProjectDialog.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZXRvc1xDcmVhdGVQcm9qZWN0RGlhbG9nLnJhem9y
+[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Projects/CreateProjectDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9qZWN0c1xDcmVhdGVQcm9qZWN0RGlhbG9nLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Tarefa/CreateTaskDialog.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYXJlZmFcQ3JlYXRlVGFza0RpYWxvZy5yYXpvcg==
+[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Tasks/CreateTaskDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYXNrc1xDcmVhdGVUYXNrRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Tasks/TaskCard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYXNrc1xUYXNrQ2FyZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Components/Test.razor]
@@ -79,8 +83,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvamVjdHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Pages/TaskOperations.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFza09wZXJhdGlvbnMucmF6b3I=
+[C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Pages/TaskDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFza0RldGFpbHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/diogo/Desktop/ESII_SGSC/Frontend/Pages/Tasks.razor]

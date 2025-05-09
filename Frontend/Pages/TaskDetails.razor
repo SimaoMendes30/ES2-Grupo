@@ -1,0 +1,117 @@
+﻿@page "/task/{TaskId:int}"
+@using Blazored.LocalStorage
+@using Frontend.DTOs.Task
+@using Frontend.DTOs.Project
+@using Frontend.DTOs.User
+@using Frontend.Services
+
+@inject ILocalStorageService LocalStorage
+@inject TaskService TaskService
+@inject ProjectService ProjectService
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@layout WorkspaceLayout
+
+<PageTitle>Detalhes da Tarefa</PageTitle>
+
+<div class="page-container">
+    <div class="glass-side"></div>
+
+    <div style="flex:2;padding:2rem">
+        @if (_task is null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate Size="Size.Large" />
+        }
+        else
+        {
+            <!-- ========== INFORMAÇÕES DA TAREFA ========== -->
+            <MudPaper Elevation="3" Class="pa-6 mb-6"
+                      Style="background:rgba(255,255,255,.95);border-radius:16px;position:relative;">
+                
+                <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteTask"
+                           Style="position:absolute;top:16px;right:16px;">
+                    Eliminar
+                </MudButton>
+
+                <MudStack Spacing="2">
+                    <MudText Typo="Typo.h4" Color="Color.Primary">@_task.Titulo</MudText>
+
+                    <MudDivider Class="my-2" Style="color: var(--app-primary)" />
+                    
+                    <MudText Typo="Typo.body1">@_task.Descricao</MudText>
+                    
+                    <MudDivider Class="my-2" Style="color: var(--app-primary)" />        
+                    
+                    <MudStack Row Spacing="4" Class="mt-2">
+                        <MudText Typo="Typo.caption"><b>Responsável:</b> @(_responsavel?.Nome ?? "N/D")</MudText>
+                        <MudText Typo="Typo.caption"><b>Estado:</b> @_task.Estado</MudText>
+                        <MudText Typo="Typo.caption">
+                            <b>Data de Início:</b> 
+                            @_task.DataInicio.UtcDateTime.ToString("dd/MM/yyyy")
+                        </MudText>
+                        <MudText Typo="Typo.caption">
+                            <b>Data de Fim:</b> 
+                            @(_task.DataFim.HasValue ? _task.DataFim.Value.UtcDateTime.ToString("dd/MM/yyyy") : "Em curso")
+                        </MudText>
+                        <MudText Typo="Typo.caption"><b>Preço/h:</b> @(_task.PrecoHora.HasValue ? _task.PrecoHora.Value.ToString("C") : "N/D")</MudText>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        }
+    </div>
+
+    <div class="glass-side"></div>
+</div>
+
+@code {
+    [Parameter] public int TaskId { get; set; }
+
+    private TaskDetailsExtendedDto? _task;
+    private UserDetailsDto? _responsavel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await LocalStorage.GetItemAsync<int?>("user_id");
+        if (!userId.HasValue)
+        {
+            Snackbar.Add("Utilizador não autenticado.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        var taskTask = TaskService.GetByIdAsync(TaskId);
+        
+        await Task.WhenAll(taskTask);
+
+        _task = taskTask.Result;
+
+        if (_task != null)
+        {
+            _responsavel = _task.ResponsavelNavigation;
+        }
+    }
+
+    private async Task DeleteTask()
+    {
+        var confirm = await DialogService.ShowMessageBox(
+            "Remover Tarefa",
+            "Tem a certeza que deseja marcar esta tarefa como removida?",
+            "Sim", "Cancelar");
+
+        if (confirm == true && _task is not null)
+        {
+            try
+            {
+                await TaskService.DeleteAsync(_task.IdTarefa);
+                Snackbar.Add("Tarefa marcada como removida com sucesso.", Severity.Success);
+                NavigationManager.NavigateTo("/tasks");
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Erro ao remover a tarefa: {ex.Message}", Severity.Error);
+            }
+        }
+    }
+}

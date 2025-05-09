@@ -22,7 +22,7 @@ public sealed class UserRepository : IUserRepository
     public async Task<UserEntity?> GetByIdAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Utilizadors
+        return await ctx.Utilizador
             .Include(u => u.Membros)
             .Include(u => u.Projetos)
             .Include(u => u.Tarefas)
@@ -33,7 +33,7 @@ public sealed class UserRepository : IUserRepository
     public async Task<UserEntity?> GetByUsernameAsync(string username)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Utilizadors
+        return await ctx.Utilizador
             .Include(u => u.Membros)
             .Include(u => u.Projetos)
             .Include(u => u.Tarefas)
@@ -46,7 +46,7 @@ public sealed class UserRepository : IUserRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new UserByFilterSpec(filter);
 
-        return await ctx.Utilizadors
+        return await ctx.Utilizador
             .Where(spec.ToExpression())
             .Include(u => u.Membros)
             .Include(u => u.Projetos)
@@ -60,7 +60,7 @@ public sealed class UserRepository : IUserRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new UserByFilterSpec(filter);
 
-        var query = ctx.Utilizadors
+        var query = ctx.Utilizador
             .Where(spec.ToExpression())
             .Include(u => u.Membros)
             .Include(u => u.Projetos)
@@ -88,7 +88,7 @@ public sealed class UserRepository : IUserRepository
         Validate(user);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Utilizadors.Add(user);
+        ctx.Utilizador.Add(user);
         await ctx.SaveChangesAsync();
     }
 
@@ -97,14 +97,14 @@ public sealed class UserRepository : IUserRepository
         Validate(user);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Utilizadors.Update(user);
+        ctx.Utilizador.Update(user);
         await ctx.SaveChangesAsync();
     }
 
     public async System.Threading.Tasks.Task DeleteAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        var entity = await ctx.Utilizadors.FindAsync(id);
+        var entity = await ctx.Utilizador.FindAsync(id);
         if (entity is null) return;
 
         entity.IsDeleted = true;

@@ -22,7 +22,7 @@ public sealed class ProjectRepository : IProjectRepository
     public async Task<ProjectEntity?> GetByIdAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Projetos
+        return await ctx.Projeto
             .Include(p => p.ResponsavelNavigation)
             .FirstOrDefaultAsync(p => p.IdProjeto == id);
     }
@@ -32,7 +32,7 @@ public sealed class ProjectRepository : IProjectRepository
         Validate(project);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Projetos.Add(project);
+        ctx.Projeto.Add(project);
         await ctx.SaveChangesAsync();
     }
 
@@ -41,17 +41,17 @@ public sealed class ProjectRepository : IProjectRepository
         Validate(project);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Projetos.Update(project);
+        ctx.Projeto.Update(project);
         await ctx.SaveChangesAsync();
     }
 
     public async System.Threading.Tasks.Task DeleteAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        var entity = await ctx.Projetos.FindAsync(id);
+        var entity = await ctx.Projeto.FindAsync(id);
         if (entity is null) return;
 
-        ctx.Projetos.Remove(entity);
+        entity.IsDeleted = true;
         await ctx.SaveChangesAsync();
     }
 
@@ -60,7 +60,7 @@ public sealed class ProjectRepository : IProjectRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new ProjectByFilterSpec(filter);
 
-        return await ctx.Projetos
+        return await ctx.Projeto
             .Where(spec.ToExpression())
             .Include(p => p.ResponsavelNavigation)
             .AsNoTracking()
@@ -72,7 +72,7 @@ public sealed class ProjectRepository : IProjectRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new ProjectByFilterSpec(filter);
 
-        var query = ctx.Projetos
+        var query = ctx.Projeto
             .Where(spec.ToExpression())
             .Include(p => p.ResponsavelNavigation)
             .AsNoTracking();

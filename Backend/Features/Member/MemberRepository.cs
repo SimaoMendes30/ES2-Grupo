@@ -22,7 +22,7 @@ public sealed class MemberRepository : IMemberRepository
     public async Task<MemberEntity?> GetByIdAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Membros
+        return await ctx.Membro
             .Include(m => m.IdUserEntityNavigation)
             .Include(m => m.IdProjectEntityNavigation)
             .FirstOrDefaultAsync(m => m.IdMembro == id);
@@ -33,7 +33,7 @@ public sealed class MemberRepository : IMemberRepository
         Validate(member);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Membros.Add(member);
+        ctx.Membro.Add(member);
         await ctx.SaveChangesAsync();
     }
 
@@ -42,17 +42,17 @@ public sealed class MemberRepository : IMemberRepository
         Validate(member);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Membros.Update(member);
+        ctx.Membro.Update(member);
         await ctx.SaveChangesAsync();
     }
 
     public async System.Threading.Tasks.Task DeleteAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        var entity = await ctx.Membros.FindAsync(id);
+        var entity = await ctx.Membro.FindAsync(id);
         if (entity is null) return;
 
-        ctx.Membros.Remove(entity);
+        ctx.Membro.Remove(entity);
         await ctx.SaveChangesAsync();
     }
 
@@ -60,7 +60,7 @@ public sealed class MemberRepository : IMemberRepository
     {
         await using var ctx = _factory.CreateDbContext();
         var spec = new MemberByFilterSpec(filter);
-        return await ctx.Membros
+        return await ctx.Membro
             .Where(spec.ToExpression())
             .Include(m => m.IdUserEntityNavigation)
             .Include(m => m.IdProjectEntityNavigation)
@@ -73,7 +73,7 @@ public sealed class MemberRepository : IMemberRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new MemberByFilterSpec(filter);
 
-        var query = ctx.Membros
+        var query = ctx.Membro
             .Where(spec.ToExpression())
             .Include(m => m.IdUserEntityNavigation)
             .Include(m => m.IdProjectEntityNavigation)

@@ -1,0 +1,124 @@
+﻿@using MudBlazor
+@using Frontend.DTOs.Task
+@inject ISnackbar Snackbar
+@inject IJSRuntime Js
+@inject NavigationManager NavigationManager
+@inject Frontend.Services.TaskService TaskService
+
+<MudDialog>
+    <DialogContent>
+        <EditForm EditContext="_editContext">
+            <DataAnnotationsValidator />
+
+            <MudStack Spacing="2">
+                <!-- Título -->
+                <MudTextField T="string"
+                              Label="Título"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Tarefa.Titulo"
+                              Required="true"
+                              FullWidth="true"/>
+
+                <!-- Descrição -->
+                <MudTextField T="string"
+                              Label="Descrição"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Tarefa.Descricao"
+                              TextArea="true"
+                              Lines="3"
+                              FullWidth="true"/>
+
+                <!-- Data de Início -->
+                <MudDatePicker Label="Data de Início"
+                               @bind-Date="DataInicio"
+                               Required="true" />
+
+                <!-- Preço por hora -->
+                <MudNumericField T="decimal?"
+                                 Label="Preço/Hora (€)"
+                                 Variant="Variant.Outlined"
+                                 @bind-Value="Tarefa.PrecoHora"
+                                 Min="0"
+                                 DecimalPlaces="2"
+                                 FullWidth="true"/>
+            </MudStack>
+
+            <ValidationSummary />
+        </EditForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="@Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit">Criar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    // Variáveis auxiliares para sincronizar com o MudDatePicker
+    private DateTime? DataInicio { get; set; }
+    
+    // DTO da Tarefa
+    private TaskCreateDto Tarefa { get; set; } = new();
+
+    // Contexto de edição
+    private EditContext _editContext = default!;
+    private bool _submitting = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _editContext = new EditContext(Tarefa);
+
+        // 🔍 Buscar o ID do utilizador ao LocalStorage
+        var userId = await Js.InvokeAsync<string>("localStorage.getItem", "user_id");
+
+        if (!string.IsNullOrEmpty(userId) && int.TryParse(userId, out int idParsed))
+        {
+            Tarefa.Responsavel = idParsed;
+        }
+        else
+        {
+            Snackbar.Add("Utilizador não autenticado.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+        }
+
+        // ✅ Definir valores iniciais
+        DataInicio = DateTime.Now;
+
+        // ✅ Estado por defeito como "Em curso"
+        Tarefa.Estado = "Em curso";
+    }
+
+    private async Task Submit()
+    {
+        if (_editContext.Validate())
+        {
+            // ✅ Converter para DateTimeOffset em UTC
+            Tarefa.DataInicio = DataInicio.HasValue 
+                ? new DateTimeOffset(DataInicio.Value.ToUniversalTime(), TimeSpan.Zero) 
+                : DateTimeOffset.UtcNow;
+
+            _submitting = true;
+            try
+            {
+                var result = await TaskService.CreateAsync(Tarefa);
+                Snackbar.Add("Tarefa criada com sucesso!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(result)); // 🔄 MudDialog.Close com o valor de retorno
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Erro ao criar tarefa: {ex.Message}", Severity.Error);
+            }
+            finally
+            {
+                _submitting = false;
+            }
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel(); // 🔄 MudDialog.Cancel para fechar corretamente
+    }
+}

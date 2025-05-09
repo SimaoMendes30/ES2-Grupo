@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models;
 
@@ -13,23 +15,19 @@ public partial class SgscDbContext : DbContext
     {
     }
 
-    public virtual DbSet<MemberEntity> Membros { get; set; }
+    public virtual DbSet<MemberEntity> Membro { get; set; }
 
-    public virtual DbSet<ProjectEntity> Projetos { get; set; }
+    public virtual DbSet<ProjectEntity> Projeto { get; set; }
 
-    public virtual DbSet<TaskEntity> Tarefas { get; set; }
+    public virtual DbSet<TaskEntity> Tarefa { get; set; }
 
-    public virtual DbSet<UserEntity> Utilizadors { get; set; }
-
-
-
+    public virtual DbSet<UserEntity> Utilizador { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MemberEntity>(entity =>
         {
             entity.HasKey(e => e.IdMembro).HasName("Membro_pkey");
-
-            entity.ToTable("Membro");
 
             entity.HasIndex(e => e.IdProjeto, "idx_membro_projeto");
 
@@ -38,16 +36,13 @@ public partial class SgscDbContext : DbContext
             entity.Property(e => e.IdMembro).HasColumnName("id_membro");
             entity.Property(e => e.DataConvite)
                 .HasDefaultValueSql("CURRENT_DATE")
-                .HasColumnType("timestamp without time zone")
                 .HasColumnName("data_convite");
-            entity.Property(e => e.DataEstado)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("data_estado");
+            entity.Property(e => e.DataEstado).HasColumnName("data_estado");
             entity.Property(e => e.EstadoAtividade)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("estado_atividade");
             entity.Property(e => e.EstadoConvite)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("estado_convite");
             entity.Property(e => e.IdProjeto).HasColumnName("id_projeto");
             entity.Property(e => e.IdUtilizador).HasColumnName("id_utilizador");
@@ -67,8 +62,6 @@ public partial class SgscDbContext : DbContext
         {
             entity.HasKey(e => e.IdProjeto).HasName("Projeto_pkey");
 
-            entity.ToTable("Projeto");
-
             entity.HasIndex(e => e.Responsavel, "idx_projeto_utilizador");
 
             entity.Property(e => e.IdProjeto).HasColumnName("id_projeto");
@@ -80,10 +73,10 @@ public partial class SgscDbContext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
             entity.Property(e => e.Nome)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("nome");
             entity.Property(e => e.NomeCliente)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("nome_cliente");
             entity.Property(e => e.PrecoHora)
                 .HasPrecision(10, 2)
@@ -100,17 +93,12 @@ public partial class SgscDbContext : DbContext
         {
             entity.HasKey(e => e.IdTarefa).HasName("tarefa_pkey");
 
-            entity.ToTable("Tarefa");
-
             entity.Property(e => e.IdTarefa)
                 .HasDefaultValueSql("nextval('tarefa_id_tarefa_seq'::regclass)")
                 .HasColumnName("id_tarefa");
-            entity.Property(e => e.DataFim)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("data_fim");
+            entity.Property(e => e.DataFim).HasColumnName("data_fim");
             entity.Property(e => e.DataInicio)
                 .HasDefaultValueSql("CURRENT_DATE")
-                .HasColumnType("timestamp without time zone")
                 .HasColumnName("data_inicio");
             entity.Property(e => e.Descricao).HasColumnName("descricao");
             entity.Property(e => e.Estado)
@@ -158,8 +146,6 @@ public partial class SgscDbContext : DbContext
         {
             entity.HasKey(e => e.IdUtilizador).HasName("Utilizador_pkey");
 
-            entity.ToTable("Utilizador");
-
             entity.HasIndex(e => e.Username, "Utilizador_username_key").IsUnique();
 
             entity.HasIndex(e => e.Username, "idx_utilizador_username");
@@ -168,18 +154,21 @@ public partial class SgscDbContext : DbContext
             entity.Property(e => e.Admin)
                 .HasDefaultValue(false)
                 .HasColumnName("admin");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.Nome)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("nome");
             entity.Property(e => e.NumHoras).HasColumnName("num_horas");
             entity.Property(e => e.Password)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("password");
             entity.Property(e => e.SuperUser)
                 .HasDefaultValue(false)
                 .HasColumnName("super_user");
             entity.Property(e => e.Username)
-                .HasMaxLength(250)
+                .HasMaxLength(256)
                 .HasColumnName("username");
 
             entity.HasMany(d => d.IdTarefas).WithMany(p => p.IdUtilizadors)

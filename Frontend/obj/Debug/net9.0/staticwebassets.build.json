@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "QwF44hWDkmRCwsm8V6WoLZIIADABTR2hVmfjvU/UDA4=",
+  "Hash": "GEnJ7Gerz8tlEgamKcWhpuVfdPCgnuoWjaq6B4e0z4g=",
   "Source": "Frontend",
   "BasePath": "/",
   "Mode": "Root",
@@ -73,8 +73,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "manifest",
-      "Fingerprint": "g6yf4n35qy",
-      "Integrity": "yApNBTJZMoVcjVxc/vLOFq2moz3dwzOyVLurTrOMzaw=",
+      "Fingerprint": "pe9q77ahy3",
+      "Integrity": "IXXXMfWxLIcS7tocKdYrgRHKxXLWIL1UkEb5YhuqJ1M=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "obj\\Debug\\net9.0\\blazor.boot.json"
@@ -262,8 +262,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "symbol",
-      "Fingerprint": "ju6gxvq0j7",
-      "Integrity": "VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU=",
+      "Fingerprint": "uh4b0ef515",
+      "Integrity": "fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "obj\\Debug\\net9.0\\Frontend.pdb"
@@ -283,8 +283,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "WasmResource",
       "AssetTraitValue": "runtime",
-      "Fingerprint": "jj03ardrnl",
-      "Integrity": "f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc=",
+      "Fingerprint": "m2er19105p",
+      "Integrity": "/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\webcil\\Frontend.wasm"
@@ -5834,12 +5834,12 @@
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Microsoft.Extensions.Configuration.Json.wasm"
     },
     {
-      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-ju6gxvq0j7.gz",
+      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-uh4b0ef515.gz",
       "SourceId": "Frontend",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "/",
-      "RelativePath": "_framework/Frontend#[.{fingerprint=ju6gxvq0j7}]!.pdb.gz",
+      "RelativePath": "_framework/Frontend#[.{fingerprint=uh4b0ef515}]!.pdb.gz",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -5848,8 +5848,8 @@
       "RelatedAsset": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.pdb",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "cgw3boxt9e",
-      "Integrity": "DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY=",
+      "Fingerprint": "7kx3akhof0",
+      "Integrity": "p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.pdb"
@@ -7283,12 +7283,12 @@
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\System.IO.FileSystem.wasm"
     },
     {
-      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-jj03ardrnl.gz",
+      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-m2er19105p.gz",
       "SourceId": "Frontend",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "/",
-      "RelativePath": "_framework/Frontend#[.{fingerprint=jj03ardrnl}]!.wasm.gz",
+      "RelativePath": "_framework/Frontend#[.{fingerprint=m2er19105p}]!.wasm.gz",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -7297,8 +7297,8 @@
       "RelatedAsset": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.wasm",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "g6dz1vaxwj",
-      "Integrity": "iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A=",
+      "Fingerprint": "p2oeixha3g",
+      "Integrity": "n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.wasm"
@@ -8081,7 +8081,7 @@
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\System.Reflection.Emit.wasm"
     },
     {
-      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-g6yf4n35qy.gz",
+      "Identity": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-pe9q77ahy3.gz",
       "SourceId": "Frontend",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\",
@@ -8095,8 +8095,8 @@
       "RelatedAsset": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\blazor.boot.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "iqrblxdyzi",
-      "Integrity": "1vV6beryYn/me8+zYA0pyB0iseXoQGgQnf5pk28k0MY=",
+      "Fingerprint": "t9nyvksf2t",
+      "Integrity": "UXlJsqeXhOw8JeS5uZqj79zgUAwbF8VsSlGo3uYPXqU=",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\blazor.boot.json"
@@ -11846,11 +11846,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"yApNBTJZMoVcjVxc/vLOFq2moz3dwzOyVLurTrOMzaw=\""
+          "Value": "\"IXXXMfWxLIcS7tocKdYrgRHKxXLWIL1UkEb5YhuqJ1M=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11860,18 +11860,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-yApNBTJZMoVcjVxc/vLOFq2moz3dwzOyVLurTrOMzaw="
+          "Value": "sha256-IXXXMfWxLIcS7tocKdYrgRHKxXLWIL1UkEb5YhuqJ1M="
         }
       ]
     },
     {
       "Route": "_framework/blazor.boot.json",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-g6yf4n35qy.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-pe9q77ahy3.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000076458445"
+          "Quality": "0.000076446755"
         }
       ],
       "ResponseHeaders": [
@@ -11881,15 +11881,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "13078"
+          "Value": "13080"
         },
         {
           "Name": "ETag",
-          "Value": "\"1vV6beryYn/me8+zYA0pyB0iseXoQGgQnf5pk28k0MY=\""
+          "Value": "\"UXlJsqeXhOw8JeS5uZqj79zgUAwbF8VsSlGo3uYPXqU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:07:14 GMT"
+          "Value": "Fri, 09 May 2025 17:44:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11909,19 +11909,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"yApNBTJZMoVcjVxc/vLOFq2moz3dwzOyVLurTrOMzaw=\""
+          "Value": "W/\"IXXXMfWxLIcS7tocKdYrgRHKxXLWIL1UkEb5YhuqJ1M=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-yApNBTJZMoVcjVxc/vLOFq2moz3dwzOyVLurTrOMzaw="
+          "Value": "sha256-IXXXMfWxLIcS7tocKdYrgRHKxXLWIL1UkEb5YhuqJ1M="
         }
       ]
     },
     {
       "Route": "_framework/blazor.boot.json.gz",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-g6yf4n35qy.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\njn95cf9xo-pe9q77ahy3.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -11930,7 +11930,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "13078"
+          "Value": "13080"
         },
         {
           "Name": "Content-Type",
@@ -11938,11 +11938,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"1vV6beryYn/me8+zYA0pyB0iseXoQGgQnf5pk28k0MY=\""
+          "Value": "\"UXlJsqeXhOw8JeS5uZqj79zgUAwbF8VsSlGo3uYPXqU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:07:14 GMT"
+          "Value": "Fri, 09 May 2025 17:44:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11960,7 +11960,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-1vV6beryYn/me8+zYA0pyB0iseXoQGgQnf5pk28k0MY="
+          "Value": "sha256-UXlJsqeXhOw8JeS5uZqj79zgUAwbF8VsSlGo3uYPXqU="
         }
       ]
     },
@@ -14188,7 +14188,7 @@
       ]
     },
     {
-      "Route": "_framework/Frontend.jj03ardrnl.wasm",
+      "Route": "_framework/Frontend.m2er19105p.wasm",
       "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.wasm",
       "Selectors": [],
       "ResponseHeaders": [
@@ -14198,7 +14198,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "242453"
+          "Value": "246549"
         },
         {
           "Name": "Content-Type",
@@ -14206,11 +14206,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc=\""
+          "Value": "\"/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:12 GMT"
+          "Value": "Fri, 09 May 2025 17:46:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14220,7 +14220,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "jj03ardrnl"
+          "Value": "m2er19105p"
         },
         {
           "Name": "label",
@@ -14228,18 +14228,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc="
+          "Value": "sha256-/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w="
         }
       ]
     },
     {
-      "Route": "_framework/Frontend.jj03ardrnl.wasm",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-jj03ardrnl.gz",
+      "Route": "_framework/Frontend.m2er19105p.wasm",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-m2er19105p.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000012062290"
+          "Quality": "0.000011863663"
         }
       ],
       "ResponseHeaders": [
@@ -14249,15 +14249,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "82902"
+          "Value": "84290"
         },
         {
           "Name": "ETag",
-          "Value": "\"iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A=\""
+          "Value": "\"n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14277,13 +14277,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc=\""
+          "Value": "W/\"/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "jj03ardrnl"
+          "Value": "m2er19105p"
         },
         {
           "Name": "label",
@@ -14291,13 +14291,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc="
+          "Value": "sha256-/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w="
         }
       ]
     },
     {
-      "Route": "_framework/Frontend.jj03ardrnl.wasm.gz",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-jj03ardrnl.gz",
+      "Route": "_framework/Frontend.m2er19105p.wasm.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-m2er19105p.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -14306,7 +14306,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "82902"
+          "Value": "84290"
         },
         {
           "Name": "Content-Type",
@@ -14314,11 +14314,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A=\""
+          "Value": "\"n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14336,7 +14336,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "jj03ardrnl"
+          "Value": "m2er19105p"
         },
         {
           "Name": "label",
@@ -14344,12 +14344,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A="
+          "Value": "sha256-n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc="
         }
       ]
     },
     {
-      "Route": "_framework/Frontend.ju6gxvq0j7.pdb",
+      "Route": "_framework/Frontend.pdb",
       "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.pdb",
       "Selectors": [],
       "ResponseHeaders": [
@@ -14359,7 +14359,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "134136"
+          "Value": "137824"
         },
         {
           "Name": "Content-Type",
@@ -14367,40 +14367,32 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU=\""
+          "Value": "\"fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:12 GMT"
+          "Value": "Fri, 09 May 2025 17:46:17 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "ju6gxvq0j7"
-        },
-        {
-          "Name": "label",
-          "Value": "_framework/Frontend.pdb"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU="
+          "Value": "sha256-fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs="
         }
       ]
     },
     {
-      "Route": "_framework/Frontend.ju6gxvq0j7.pdb",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-ju6gxvq0j7.gz",
+      "Route": "_framework/Frontend.pdb",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-uh4b0ef515.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000009824051"
+          "Quality": "0.000009501278"
         }
       ],
       "ResponseHeaders": [
@@ -14410,19 +14402,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "101790"
+          "Value": "105248"
         },
         {
           "Name": "ETag",
-          "Value": "\"DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY=\""
+          "Value": "\"p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         },
         {
           "Name": "Content-Encoding",
@@ -14438,27 +14430,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU=\""
+          "Value": "W/\"fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs=\""
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "ju6gxvq0j7"
-        },
-        {
-          "Name": "label",
-          "Value": "_framework/Frontend.pdb"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU="
+          "Value": "sha256-fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs="
         }
       ]
     },
     {
-      "Route": "_framework/Frontend.ju6gxvq0j7.pdb.gz",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-ju6gxvq0j7.gz",
+      "Route": "_framework/Frontend.pdb.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-uh4b0ef515.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -14467,7 +14451,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "101790"
+          "Value": "105248"
         },
         {
           "Name": "Content-Type",
@@ -14475,11 +14459,164 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY=\""
+          "Value": "\"p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc="
+        }
+      ]
+    },
+    {
+      "Route": "_framework/Frontend.uh4b0ef515.pdb",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.pdb",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "137824"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 17:46:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "uh4b0ef515"
+        },
+        {
+          "Name": "label",
+          "Value": "_framework/Frontend.pdb"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs="
+        }
+      ]
+    },
+    {
+      "Route": "_framework/Frontend.uh4b0ef515.pdb",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-uh4b0ef515.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000009501278"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "105248"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "uh4b0ef515"
+        },
+        {
+          "Name": "label",
+          "Value": "_framework/Frontend.pdb"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fuw07PkA/RPhEiCo/SOcmQOd3KF7lz2zBN56YJVgjJs="
+        }
+      ]
+    },
+    {
+      "Route": "_framework/Frontend.uh4b0ef515.pdb.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-uh4b0ef515.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "105248"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14497,7 +14634,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ju6gxvq0j7"
+          "Value": "uh4b0ef515"
         },
         {
           "Name": "label",
@@ -14505,144 +14642,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY="
-        }
-      ]
-    },
-    {
-      "Route": "_framework/Frontend.pdb",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\bin\\Debug\\net9.0\\wwwroot\\_framework\\Frontend.pdb",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "134136"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/octet-stream"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:12 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU="
-        }
-      ]
-    },
-    {
-      "Route": "_framework/Frontend.pdb",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-ju6gxvq0j7.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000009824051"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "101790"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/octet-stream"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-VTzGxREmQ2ypNy2mmYD88HXYn5j3oaffVJmlh58POgU="
-        }
-      ]
-    },
-    {
-      "Route": "_framework/Frontend.pdb.gz",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\820j4a4l7m-ju6gxvq0j7.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "101790"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/octet-stream"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-DGKrsVDSUflH5pc2rtTLBC5n81sGQKO3/FR364lrElY="
+          "Value": "sha256-p/YM7BF+cM4BXd2VivFbW2iJQ1gda2XlVGs9CazOhRc="
         }
       ]
     },
@@ -14657,7 +14657,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "242453"
+          "Value": "246549"
         },
         {
           "Name": "Content-Type",
@@ -14665,11 +14665,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc=\""
+          "Value": "\"/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:12 GMT"
+          "Value": "Fri, 09 May 2025 17:46:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14679,18 +14679,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc="
+          "Value": "sha256-/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w="
         }
       ]
     },
     {
       "Route": "_framework/Frontend.wasm",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-jj03ardrnl.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-m2er19105p.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000012062290"
+          "Quality": "0.000011863663"
         }
       ],
       "ResponseHeaders": [
@@ -14700,15 +14700,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "82902"
+          "Value": "84290"
         },
         {
           "Name": "ETag",
-          "Value": "\"iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A=\""
+          "Value": "\"n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14728,19 +14728,19 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc=\""
+          "Value": "W/\"/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-f0thGzbDrwI1hsAYN/ELJ0iNal6gbeLGRai49UxTxAc="
+          "Value": "sha256-/vR09UWhH6hLZL3yKHFRmF2fGN1ouolN8x63N4gR15w="
         }
       ]
     },
     {
       "Route": "_framework/Frontend.wasm.gz",
-      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-jj03ardrnl.gz",
+      "AssetFile": "C:\\Users\\diogo\\Desktop\\ESII_SGSC\\Frontend\\obj\\Debug\\net9.0\\compressed\\idv3gmpu33-m2er19105p.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -14749,7 +14749,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "82902"
+          "Value": "84290"
         },
         {
           "Name": "Content-Type",
@@ -14757,11 +14757,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A=\""
+          "Value": "\"n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 09 May 2025 09:12:13 GMT"
+          "Value": "Fri, 09 May 2025 17:46:18 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -14779,7 +14779,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-iHV6IRr+baD/eRmNMT4CrYSYKx1UeLAxGCUdGrPBP8A="
+          "Value": "sha256-n4j3MhZQUoqvOP32mIGYvBJQKlT2yYCHKvmmbEXCNPc="
         }
       ]
     },

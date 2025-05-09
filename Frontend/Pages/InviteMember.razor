@@ -20,7 +20,7 @@
         }
         else if (_users is null || !_users.Any())
         {
-            <MudAlert Severity="Info" Variant="Filled">
+            <MudAlert Severity="Severity.Info" Variant="Variant.Filled">
                 Não existem utilizadores disponíveis para convidar.
             </MudAlert>
         }
@@ -107,7 +107,7 @@
             }
         }
         catch (Exception ex)
-        {
+        { 
             Snackbar.Add($"Erro ao convidar membro: {ex.Message}", Severity.Error);
         }
     }

@@ -121,9 +121,9 @@ using (var scope = app.Services.CreateScope())
     var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<SgscDbContext>>();
     await using var ctx = await factory.CreateDbContextAsync();
 
-    if (!ctx.Utilizadors.Any())
+    if (!ctx.Utilizador.Any())
     {
-        ctx.Utilizadors.Add(new UserEntity
+        ctx.Utilizador.Add(new UserEntity
         {
             Nome      = "Administrador-Raiz",
             Username  = "admin",

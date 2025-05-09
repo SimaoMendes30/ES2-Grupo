@@ -26,6 +26,7 @@ public sealed class TaskService : ITaskService
         var entity = TaskFactory.Create(
             responsavelId: dto.Responsavel,
             titulo: dto.Titulo,
+            descricao: dto.Descricao,
             dataInicio: dto.DataInicio,
             dataFim: dto.DataFim,
             estado: dto.Estado,

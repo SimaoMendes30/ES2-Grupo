@@ -22,7 +22,7 @@ public sealed class TaskRepository : ITaskRepository
     public async Task<TaskEntity?> GetByIdAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        return await ctx.Tarefas
+        return await ctx.Tarefa
             .Include(t => t.ResponsavelNavigation)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.IdTarefa == id);
@@ -33,7 +33,7 @@ public sealed class TaskRepository : ITaskRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new TaskByFilterSpec(filter);
 
-        return await ctx.Tarefas
+        return await ctx.Tarefa
             .Where(spec.ToExpression())
             .Include(t => t.ResponsavelNavigation)
             .AsNoTracking()
@@ -45,7 +45,7 @@ public sealed class TaskRepository : ITaskRepository
         await using var ctx = _factory.CreateDbContext();
         var spec = new TaskByFilterSpec(filter);
 
-        var query = ctx.Tarefas
+        var query = ctx.Tarefa
             .Where(spec.ToExpression())
             .Include(t => t.ResponsavelNavigation)
             .AsNoTracking();
@@ -71,7 +71,7 @@ public sealed class TaskRepository : ITaskRepository
         Validate(task);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Tarefas.Add(task);
+        ctx.Tarefa.Add(task);
         await ctx.SaveChangesAsync();
     }
 
@@ -80,14 +80,14 @@ public sealed class TaskRepository : ITaskRepository
         Validate(task);
 
         await using var ctx = _factory.CreateDbContext();
-        ctx.Tarefas.Update(task);
+        ctx.Tarefa.Update(task);
         await ctx.SaveChangesAsync();
     }
 
     public async System.Threading.Tasks.Task DeleteAsync(int id)
     {
         await using var ctx = _factory.CreateDbContext();
-        var entity = await ctx.Tarefas.FindAsync(id);
+        var entity = await ctx.Tarefa.FindAsync(id);
         if (entity is null) return;
 
         entity.IsDeleted = true;
@@ -98,7 +98,7 @@ public sealed class TaskRepository : ITaskRepository
     {
         await using var ctx = _factory.CreateDbContext();
 
-        return await ctx.Utilizadors
+        return await ctx.Utilizador
             .Where(u => u.IdUtilizador == userId)
             .SelectMany(u => u.IdTarefas.Select(t => t.IdTarefa))
             .Distinct()
@@ -109,7 +109,7 @@ public sealed class TaskRepository : ITaskRepository
     {
         await using var ctx = _factory.CreateDbContext();
 
-        return await ctx.Tarefas
+        return await ctx.Tarefa
             .Where(t => t.IdProjetos.Any(p => p.IdProjeto == projetoId))
             .Include(t => t.ResponsavelNavigation)
             .AsNoTracking()

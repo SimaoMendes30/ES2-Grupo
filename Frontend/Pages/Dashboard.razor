@@ -1,8 +1,8 @@
 ﻿@page "/dashboard"
 @using System.IdentityModel.Tokens.Jwt
 @using Blazored.LocalStorage
-@using Frontend.Components.Projetos
-@using Frontend.Components.Tarefa
+@using Frontend.Components.Projects
+@using Frontend.Components.Tasks
 @using Frontend.Services
 @using Frontend.DTOs.Project
 @using Frontend.DTOs.Task
@@ -151,14 +151,14 @@
                     @foreach (var tarefa in _ultimasTarefas)
                     {
                         <MudItem xs="12" sm="6" md="3">
-                            <NavLink href="@($"/tarefas/{tarefa.IdTarefa}")" class="text-decoration-none d-block">
+                            <NavLink href="@($"/task/{tarefa.IdTarefa}")" class="text-decoration-none d-block">
                                 <MudCard class="pa-3 w-100"
                                          style="height: 100%; border-radius: var(--app-radius);"
                                          Elevation="2">
                                     <MudCardContent>
                                         <MudText Typo="Typo.subtitle1" Color="Color.Secondary">@tarefa.Descricao</MudText>
                                         <MudText Typo="Typo.caption" Class="text-muted">
-                                            <b>Criado:</b> @tarefa.DataInicio.ToShortDateString()
+                                            <b>Criado:</b> @tarefa.DataInicio.UtcDateTime.ToString("dd/MM/yyyy HH:mm")
                                         </MudText>
                                     </MudCardContent>
                                 </MudCard>

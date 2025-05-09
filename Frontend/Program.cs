@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazored.LocalStorage;
 using MudBlazor.Services;
 using Frontend;
-using Frontend.Components.Projetos;
 using Frontend.Services;
 using MudBlazor;
 
